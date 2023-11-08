@@ -1,0 +1,61 @@
+name: kuepay_qr
+description: A new Flutter project.
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: '>=3.0.5 <4.0.0'
+  flutter: ">=3.3.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  plugin_platform_interface: ^2.0.2
+  intl: ^0.18.0
+  flutter_svg: ^1.1.0
+  qr_flutter: ^4.0.0
+  mobile_scanner: ^1.1.1
+  fluttertoast: ^8.0.9
+  get: ^4.6.5
+  image_picker: ^0.7.5
+  local_auth: ^2.1.0
+  path_provider: ^2.0.11
+  image_gallery_saver: ^1.7.1
+  share_plus: ^4.0.10+1
+  shared_preferences: ^2.0.15
+  http: ^0.13.5
+  encrypt: ^5.0.1
+  connectivity_plus: ^3.0.3
+  background_fetch:
+    git:
+      url: https://github.com/transistorsoft/flutter_background_fetch
+  shimmer_animation: ^2.1.0+1
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.viicsoft.kuepay_qr
+        pluginClass: KuepayQrPlugin
+      ios:
+        pluginClass: KuepayQrPlugin
+
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/icons/
+    - assets/images/
+    -
+  fonts:
+    - family: DMSans
+      fonts:
+        - asset: assets/fonts/DMSans-Regular.ttf

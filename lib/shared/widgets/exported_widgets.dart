@@ -1,0 +1,1 @@
+export 'offline_qrcode.dart';
