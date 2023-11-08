@@ -11,7 +11,6 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 class QRDialog {
   QRDialog.show({required String data}){
-
     final GlobalKey repaintKey = GlobalKey();
 
     showDialog(context: Get.context!, builder: (BuildContext context) {
@@ -30,7 +29,8 @@ class QRDialog {
         ),
         content: Container(
           width: width,
-          padding: const EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 5),
+          padding: const EdgeInsets.symmetric(
+              horizontal: horizontalPadding, vertical: 5),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(
                 Radius.circular(13)
@@ -40,73 +40,76 @@ class QRDialog {
             ),
           ),
           child: LayoutBuilder(
-            builder: (context, constraints) {
-              final availableWidth = constraints.maxWidth;
+              builder: (context, constraints) {
+                final availableWidth = constraints.maxWidth;
 
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
 
-                  const SizedBox(height: 15),
+                    const SizedBox(height: 15),
 
-                  RepaintBoundary(
-                    key: repaintKey,
-                    child: Container(
-                      height: availableWidth,
-                      width: availableWidth,
-                      padding: EdgeInsets.all(Dimen.horizontalMarginWidth),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: CustomColors.primary[3],
-                      ),
-                      child: Center(
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            QrImageView(
-                              data: data,
-                              size: availableWidth - (Dimen.horizontalMarginWidth * 2),
-                            ),
+                    RepaintBoundary(
+                      key: repaintKey,
+                      child: Container(
+                        height: availableWidth,
+                        width: availableWidth,
+                        padding: EdgeInsets.all(Dimen.horizontalMarginWidth),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: CustomColors.primary[3],
+                        ),
+                        child: Center(
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              QrImageView(
+                                data: data,
+                                size: availableWidth -
+                                    (Dimen.horizontalMarginWidth * 2),
+                              ),
 
-                            SvgPicture.asset(
-                                'assets/images/qr_logo_green.svg',
-                                height: (availableWidth - (Dimen.horizontalMarginWidth * 2)) * 0.17,
-                                width: (availableWidth - (Dimen.horizontalMarginWidth * 2)) * 0.17,
-                                semanticsLabel: "QR Logo"
-                            ),
-                          ],
+                              SvgPicture.asset(
+                                  'assets/images/qr_logo_green.svg',
+                                  height: (availableWidth -
+                                      (Dimen.horizontalMarginWidth * 2)) * 0.17,
+                                  width: (availableWidth -
+                                      (Dimen.horizontalMarginWidth * 2)) * 0.17,
+                                  semanticsLabel: "QR Logo"
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-                  CustomButton(
-                    height: Dimen.height * 0.06,
-                    onPressed: () {
-                      _saveQR(context, repaintKey);
-                    },
-                    text: "Save",
-                  ),
+                    CustomButton(
+                      height: Dimen.height * 0.06,
+                      onPressed: () {
+                        _saveQR(context, repaintKey);
+                      },
+                      text: "Save",
+                    ),
 
-                  const SizedBox(height: 10),
+                    const SizedBox(height: 10),
 
-                  CustomButton(
-                    height: Dimen.height * 0.06,
-                    onPressed: () {
-                      Get.back();
-                    },
-                    isOutlined: true,
-                    text: "Cancel",
-                  ),
+                    CustomButton(
+                      height: Dimen.height * 0.06,
+                      onPressed: () {
+                        Get.back();
+                      },
+                      isOutlined: true,
+                      text: "Cancel",
+                    ),
 
-                  const SizedBox(height: 10),
-                ],
-              );
-            }
+                    const SizedBox(height: 10),
+                  ],
+                );
+              }
           ),
         ),
       );

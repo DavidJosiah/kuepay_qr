@@ -1,4 +1,4 @@
-package com.viicsoft.kuepay_qr
+package android.src.main.java.com.viicsoft.kuepay_qr;
 
 import android.annotation.TargetApi
 import android.os.Build
