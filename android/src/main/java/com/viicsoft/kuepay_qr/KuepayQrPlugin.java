@@ -1,4 +1,4 @@
-package android.src.main.java.com.viicsoft.kuepay_qr;
+package com.viicsoft.kuepay_qr;
 
 import androidx.annotation.NonNull;
 

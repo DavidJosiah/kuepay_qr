@@ -2,6 +2,9 @@ group 'com.viicsoft.kuepay_qr'
 version '1.0'
 
 buildscript {
+    ext {
+        kotlin_version = '1.7.10'
+    }
     repositories {
         google()
         mavenCentral()
@@ -9,6 +12,7 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -20,9 +24,10 @@ rootProject.allprojects {
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -30,7 +35,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 23
     }
 
     dependencies {
@@ -47,4 +52,8 @@ android {
             }
         }
     }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
