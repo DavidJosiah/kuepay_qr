@@ -1,4 +1,4 @@
 library flutter_pkg;
 
-export 'pages/exported_pages.dart';
+export 'pages/pages.dart';
 export 'core/core.dart';
