@@ -18,7 +18,7 @@ class OfflineScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     CustomText.referenceSize = Constants.extraSmallScreenSize;
 
-    return GetMaterialApp(
+    return MaterialApp(
         debugShowCheckedModeBanner: true,
         theme: ThemeData(
           fontFamily: "DMSans",
@@ -30,10 +30,7 @@ class OfflineScreen extends StatelessWidget {
             selectionHandleColor: CustomColors.primary,
           ),
         ),
-        initialRoute: '/',
-        getPages: [
-          GetPage(name: "/", page: () => const _Default()),
-        ],
+        home:  const _Default(),
         locale: const Locale('en', '')
     );
   }
