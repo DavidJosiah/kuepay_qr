@@ -1,20 +1,20 @@
+// ignore_for_file: use_build_context_synchronously
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:crypto/crypto.dart';
 import 'package:get/get.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:kuepay_qr/config/config.dart';
 import 'package:kuepay_qr/controllers/controllers.dart';
@@ -23,8 +23,6 @@ import 'package:kuepay_qr/services/services.dart';
 
 class Utils {
 
-  static String accessToken = "";
-  static String uID = "";
   static bool isDarkMode = false;
 
   static void startLoading() => Get.find<KuepayOfflineController>().startLoading();
@@ -41,13 +39,6 @@ class Utils {
   static void stopCompletingOffline() => Get.find<KuepayOfflineController>().stopCompletingOffline();
 
 
-  static Future<void> getPin() async {
-    final pin = await Auth().getPin();
-
-    if(pin.isNotEmpty){
-      await UserData.setPin(pin);
-    }
-  }
 
   static List<ui.Color> getRandomColorSet({required List<List<ui.Color>> sampleSpace}){
     Random random = Random();
@@ -227,15 +218,6 @@ class Utils {
     return decrypted;
   }
 
-  static Future<String> encryptVariableHMAC (String string) async {
-
-    final hmac = Hmac(sha512, utf8.encode(Constants.hmacEncryptionKey));
-
-    final digest = hmac.convert(utf8.encode(Constants.hmacEncryptionKey + string));
-
-    return digest.toString().toUpperCase();
-  }
-
   static Future<String> getDeviceIP() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
@@ -248,24 +230,16 @@ class Utils {
     return '';
   }
 
-  static Future<bool> isFingerprintActivated () async {
+  static Future<void> completeOfflineTransactions(BuildContext? context, {bool isBackground = false}) async {
+    context ??= Get.context!;
 
-    final prefs = await SharedPreferences.getInstance();
-
-    final result = prefs.getBool('isFingerprintActivated');
-
-    return result ?? false;
-  }
-
-
-
-  static Future<void> completeOfflineTransactions({bool isBackground = false}) async {
-    if(isBackground
-        || (!Get.find<KuepayOfflineController>().isOffline.value
-            && !Get.find<KuepayOfflineController>().isCompletingOffline)) {
+    if(await UserData.isDataComplete()){
+      if(isBackground
+          || (!Get.find<KuepayOfflineController>().isOffline.value
+              && !Get.find<KuepayOfflineController>().isCompletingOffline)) {
 
         if(!isBackground) Utils.startCompletingOffline();
-        final isIntact = await OfflineTransactions.isDataIntact();
+        final isIntact = await OfflineTransactions.isDataIntact(context);
 
         if(isIntact) {
           final transactions = await OfflineTransactions.transactions;
@@ -275,14 +249,18 @@ class Utils {
             completeOfflineTransaction(encryptedData: encrypted);
 
             if(result){
-              await OfflineTransactions.remove(encrypted);
+              await OfflineTransactions.remove(context, encrypted);
             }
           }
+
+          await UserData.resetLimit();
 
           if(!isBackground) Utils.stopCompletingOffline();
         } else {
           if(!isBackground) Utils.stopCompletingOffline();
         }
+      }
     }
+
   }
 }

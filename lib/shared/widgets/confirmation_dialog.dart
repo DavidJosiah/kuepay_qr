@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:kuepay_qr/config/config.dart';
 
 import 'custom_button.dart';
 import 'custom_text.dart';
+import 'svg.dart';
 
 void showConfirmationDialog ({
   required BuildContext parentContext,
@@ -60,7 +60,7 @@ void showConfirmationDialog ({
                 color: CustomColors.error[3],
               ),
               child: Center(
-                child: SvgPicture.asset(
+                child: SVG(
                     icon,
                     height: 58,
                     width: 58,

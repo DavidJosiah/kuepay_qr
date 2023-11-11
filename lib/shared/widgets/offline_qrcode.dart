@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:kuepay_qr/config/config.dart';
@@ -54,13 +53,13 @@ class _OfflineQRCodeState extends State<OfflineQRCode> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
 
-          SizedBox(height: Dimen.verticalMarginHeight),
+          SizedBox(height: Dimen.verticalMarginHeight(context)),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
 
-              SvgPicture.asset(
+              const SVG(
                   'assets/icons/square_error.svg',
                   height: 24,
                   width: 24,
@@ -82,7 +81,7 @@ class _OfflineQRCodeState extends State<OfflineQRCode> {
             ],
           ),
 
-          SizedBox(height: Dimen.verticalMarginHeight),
+          SizedBox(height: Dimen.verticalMarginHeight(context)),
 
           Container(
             color: CustomColors.primary[3],
@@ -103,7 +102,7 @@ class _OfflineQRCodeState extends State<OfflineQRCode> {
                   size: maxWidth * 0.9,
                 ),
 
-                SvgPicture.asset(
+                SVG(
                     'assets/images/qr_logo_green.svg',
                     height: maxWidth * 0.9 * 0.165,
                     width: maxWidth * 0.9 * 0.165,

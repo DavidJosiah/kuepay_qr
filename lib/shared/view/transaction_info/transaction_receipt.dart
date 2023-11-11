@@ -1,9 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:kuepay_qr/logic/logic.dart';
@@ -36,9 +37,9 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
 
     return Scaffold(
       body: Container(
-        width: Dimen.width,
+        width: Dimen.width(context),
         color: CustomColors.primary[3],
-        padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 0.5),
+        padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 0.5),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -58,7 +59,7 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                             child: IconButton(
                               padding: EdgeInsets.zero,
                               onPressed: () => Get.back(),
-                              icon: SvgPicture.asset(
+                              icon: const SVG(
                                   'assets/icons/cancel.svg',
                                   height: 24,
                                   width: 24,
@@ -68,7 +69,7 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                             )
                         ),
 
-                        SizedBox(width: Dimen.horizontalMarginWidth * 3),
+                        SizedBox(width: Dimen.horizontalMarginWidth(context) * 3),
 
                       ],
                       automaticallyImplyLeading: false,
@@ -76,12 +77,12 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                       elevation: 0,
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight),
+                    SizedBox(height: Dimen.verticalMarginHeight(context)),
 
                     Builder(
                         builder: (context) {
                           final List<bool> visibility = getVisibility();
-                          double height = Dimen.height * 0.21;
+                          double height = Dimen.height(context) * 0.21;
 
                           int count = 0;
                           for(bool visible in visibility){
@@ -90,15 +91,15 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                             }
                           }
 
-                          height = height + (Dimen.height * .085 * (count + 3));
+                          height = height + (Dimen.height(context) * .085 * (count + 3));
 
                           return RepaintBoundary(
                             key: _repaintKey,
                             child: Container(
                               color: CustomColors.primary[3],
                               padding: EdgeInsets.symmetric(
-                                  vertical: Dimen.verticalMarginHeight * 0.75,
-                                  horizontal: Dimen.horizontalMarginWidth * 1.5
+                                  vertical: Dimen.verticalMarginHeight(context) * 0.75,
+                                  horizontal: Dimen.horizontalMarginWidth(context) * 1.5
                               ),
                               child: Stack(
                                 alignment: Alignment.bottomCenter,
@@ -115,8 +116,8 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                                     child: Column(
                                       children: [
                                         Container(
-                                          height: Dimen.height * 0.08,
-                                          padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 2.5),
+                                          height: Dimen.height(context) * 0.08,
+                                          padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 2.5),
                                           child: Row(
                                             children: [
                                               CustomText(
@@ -129,11 +130,11 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                                               const Expanded(child: SizedBox()),
 
                                               SizedBox(
-                                                width: Dimen.width * 0.225,
-                                                height:Dimen.height * 0.05,
-                                                child: AspectRatio(
+                                                width: Dimen.width(context) * 0.225,
+                                                height:Dimen.height(context) * 0.05,
+                                                child: const AspectRatio(
                                                   aspectRatio: 3.11,
-                                                  child: SvgPicture.asset(
+                                                  child: SVG(
                                                       'assets/images/kuepay_logo_dark.svg',
                                                       height: 36,
                                                       width: 112,
@@ -142,7 +143,7 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                                                 ),
                                               ),
 
-                                              SizedBox(width: Dimen.horizontalMarginWidth)
+                                              SizedBox(width: Dimen.horizontalMarginWidth(context))
                                             ],
                                           ),
                                         ),
@@ -153,10 +154,10 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                                           color: CustomColors.grey[3],
                                         ),
 
-                                        SizedBox(height: Dimen.verticalMarginHeight * 3),
+                                        SizedBox(height: Dimen.verticalMarginHeight(context) * 3),
 
                                         SizedBox(
-                                          width: Dimen.width * 0.75,
+                                          width: Dimen.width(context) * 0.75,
                                           child: Center(
                                             child: CustomText(
                                               '${widget.transaction.currency}$value',
@@ -172,10 +173,10 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                                           ),
                                         ),
 
-                                        SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                                        SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                                         SizedBox(
-                                          width: Dimen.width * 0.8,
+                                          width: Dimen.width(context) * 0.8,
                                           child: CustomText(
                                             DateFormat
                                               ("LLLL dd, yyyy hh:mm aa")
@@ -188,10 +189,10 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                                           ),
                                         ),
 
-                                        SizedBox(height: Dimen.verticalMarginHeight * 1.5),
+                                        SizedBox(height: Dimen.verticalMarginHeight(context) * 1.5),
 
                                         Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 2.5),
+                                          padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 2.5),
                                           child: Column(
                                             children: [
                                               item(
@@ -281,7 +282,7 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                                   ),
 
                                   Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 2),
+                                    padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 2),
                                     child: bottomSerration(),
                                   )
                                 ],
@@ -291,7 +292,7 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                         }
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight * 2),
+                    SizedBox(height: Dimen.verticalMarginHeight(context) * 2),
 
                     Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -314,7 +315,7 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                                 elevation: 0,
                                 padding: const EdgeInsets.all(0),
                                 child: Center(
-                                  child: SvgPicture.asset(
+                                  child: SVG(
                                       'assets/icons/download.svg',
                                       height: 24,
                                       width: 24,
@@ -344,8 +345,8 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                                 onPressed: () => _share(),
                                 elevation: 0,
                                 padding: const EdgeInsets.all(0),
-                                child: Center(
-                                  child: SvgPicture.asset(
+                                child: const Center(
+                                  child: SVG(
                                       'assets/icons/share.svg',
                                       height: 28,
                                       width: 28,
@@ -359,7 +360,7 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                         ]
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight * 2),
+                    SizedBox(height: Dimen.verticalMarginHeight(context) * 2),
 
                   ],
                 ),
@@ -378,7 +379,7 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: Dimen.verticalMarginHeight * 1.35),
+            padding: EdgeInsets.symmetric(vertical: Dimen.verticalMarginHeight(context) * 1.35),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -391,7 +392,7 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                   ).textBodyLarge,
                 ),
 
-                SizedBox(width: Dimen.horizontalMarginWidth * 4),
+                SizedBox(width: Dimen.horizontalMarginWidth(context) * 4),
 
                 Expanded(
                   child: Align(
@@ -431,7 +432,7 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
 
       Utils.stopLoading();
 
-      if(result) Snack.show(message: "Receipt saved successfully", type: SnackBarType.info);
+      if(result) Snack.show(context, message: "Receipt saved successfully", type: SnackBarType.info);
 
     } catch (e) {
       if (kDebugMode) {

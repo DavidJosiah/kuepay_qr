@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -11,7 +12,7 @@ class LocalAuthApi {
 
   static final LocalAuthentication localAuth = LocalAuthentication();
 
-  static Future<bool> authenticate() async {
+  static Future<bool> authenticate(BuildContext context) async {
     final bool canAuthenticate = await localAuth.canCheckBiometrics;
 
     if(!canAuthenticate) return false;
@@ -36,7 +37,8 @@ class LocalAuthApi {
       if(kDebugMode){
         print(e.message);
       }
-      Snack.show(message: e.message ?? "An error occurred", type: SnackBarType.error);
+      // ignore: use_build_context_synchronously
+      Snack.show(context, message: e.message ?? "An error occurred", type: SnackBarType.error);
       return false;
     }
   }

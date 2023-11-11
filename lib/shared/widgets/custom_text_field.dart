@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:kuepay_qr/config/config.dart';
 
@@ -374,7 +373,7 @@ class CustomTextField extends StatelessWidget {
                               onObscurityChange!(obscureText!);
                             }
                           },
-                        child: SvgPicture.asset(
+                        child: SVG(
                             obscureText ?? false
                                 ? 'assets/icons/show_password.svg'
                                 : 'assets/icons/hide_password.svg',
@@ -396,7 +395,7 @@ class CustomTextField extends StatelessWidget {
           if(errorText != null && showError)
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: Dimen.width * 0.02,
+                horizontal: Dimen.width(context) * 0.02,
                 vertical: height * 0.05,
               ),
               child: Row(

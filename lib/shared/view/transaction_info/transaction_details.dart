@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -8,9 +7,6 @@ import 'package:kuepay_qr/config/config.dart';
 import 'package:kuepay_qr/logic/logic.dart';
 import 'package:kuepay_qr/shared/shared.dart';
 import 'package:kuepay_qr/controllers/controllers.dart';
-
-import 'qr_dialog.dart';
-import 'transaction_receipt.dart';
 
 class TransactionDetails extends StatelessWidget {
   final Transaction transaction;
@@ -41,7 +37,7 @@ class TransactionDetails extends StatelessWidget {
           onPressed: () {
             Get.back();
           },
-          icon: SvgPicture.asset(
+          icon: SVG(
               'assets/icons/back_arrow.svg',
               height: 24,
               width: 24,
@@ -63,10 +59,10 @@ class TransactionDetails extends StatelessWidget {
           if(transaction.type == "PRCHS" && !hideViewQR)
             TextButton(
               onPressed: () {
-                QRDialog.show(data: transaction.id);
+                QRDialog.show(context, data: transaction.id);
               },
               style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth),
+                padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context)),
               ),
               child: CustomText(
                 isComplete ? "VIEW PURCHASE QR" : "VIEW QR",
@@ -77,7 +73,7 @@ class TransactionDetails extends StatelessWidget {
             ),
 
           if(transaction.type == "PRCHS" && !hideViewQR)
-            SizedBox(width: Dimen.horizontalMarginWidth * 3)
+            SizedBox(width: Dimen.horizontalMarginWidth(context) * 3)
         ],
         elevation: 0,
         backgroundColor: CustomColors.dynamicColor(
@@ -92,7 +88,7 @@ class TransactionDetails extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 3),
+                padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 3),
                 child: Column(
                   children: [
 
@@ -101,15 +97,15 @@ class TransactionDetails extends StatelessWidget {
                         if(isOfflineTransaction && showOfflineDialog){
                           return Column(
                             children: [
-                              SizedBox(height: Dimen.verticalMarginHeight),
+                              SizedBox(height: Dimen.verticalMarginHeight(context)),
 
                               Align(
                                 alignment: Alignment.topCenter,
                                 child: Container(
-                                    width: Dimen.width * 0.9,
+                                    width: Dimen.width(context) * 0.9,
                                     padding: EdgeInsets.symmetric(
-                                        vertical: Dimen.verticalMarginHeight,
-                                        horizontal: Dimen.horizontalMarginWidth * 2
+                                        vertical: Dimen.verticalMarginHeight(context),
+                                        horizontal: Dimen.horizontalMarginWidth(context) * 2
                                     ),
                                     decoration: BoxDecoration(
                                       color: CustomColors.error[3],
@@ -120,7 +116,7 @@ class TransactionDetails extends StatelessWidget {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
 
-                                          SvgPicture.asset(
+                                          const SVG(
                                               'assets/icons/round_error.svg',
                                               height: 28,
                                               width: 28,
@@ -128,7 +124,7 @@ class TransactionDetails extends StatelessWidget {
                                               semanticsLabel: "Round Error"
                                           ),
 
-                                          SizedBox(width: Dimen.horizontalMarginWidth * 2),
+                                          SizedBox(width: Dimen.horizontalMarginWidth(context) * 2),
 
                                           Expanded(
                                             child: CustomText(
@@ -161,18 +157,18 @@ class TransactionDetails extends StatelessWidget {
                           return Column(
                             children: [
                               SizedBox(
-                                width: Dimen.height * 0.24,
-                                height: Dimen.height * 0.24,
+                                width: Dimen.height(context) * 0.24,
+                                height: Dimen.height(context) * 0.24,
                                 child: Image.asset(
                                   fit: BoxFit.cover,
                                   "assets/images/successful_gif.gif",
-                                  width: Dimen.height * 0.24,
-                                  height: Dimen.height * 0.24,
+                                  width: Dimen.height(context) * 0.24,
+                                  height: Dimen.height(context) * 0.24,
                                 ),
                               ),
 
                               SizedBox(
-                                width: Dimen.width * 0.8,
+                                width: Dimen.width(context) * 0.8,
                                 child: CustomText(
                                   "Transaction Successful",
                                   style: TextStyles(
@@ -182,7 +178,7 @@ class TransactionDetails extends StatelessWidget {
                                 ),
                               ),
 
-                              SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                              SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                             ],
                           );
@@ -190,11 +186,11 @@ class TransactionDetails extends StatelessWidget {
                           return Column(
                             children: [
 
-                              SizedBox(height: Dimen.verticalMarginHeight * 3),
+                              SizedBox(height: Dimen.verticalMarginHeight(context) * 3),
 
                               Container(
-                                  width: Dimen.height * 0.12,
-                                  height: Dimen.height * 0.12,
+                                  width: Dimen.height(context) * 0.12,
+                                  height: Dimen.height(context) * 0.12,
                                   decoration: BoxDecoration(
                                       color: transaction.colors[0],
                                       shape: BoxShape.circle,
@@ -208,15 +204,15 @@ class TransactionDetails extends StatelessWidget {
                                   ),
                                   child: Center(
                                     child: Padding(
-                                      padding: EdgeInsets.all(Dimen.horizontalMarginWidth * 0.5),
+                                      padding: EdgeInsets.all(Dimen.horizontalMarginWidth(context) * 0.5),
                                       child: FittedBox(
                                         fit: BoxFit.contain,
-                                        child:  SvgPicture.asset(
+                                        child:  SVG(
                                             transaction.imagePath,
                                             color: transaction.imagePath == 'assets/icons/cart.svg'
                                                 ? CustomColors.white : null,
-                                            height: Dimen.height * 0.12 * 0.4,
-                                            width: Dimen.height * 0.12 * 0.4,
+                                            height: Dimen.height(context) * 0.12 * 0.4,
+                                            width: Dimen.height(context) * 0.12 * 0.4,
                                             semanticsLabel: "Image"
                                         ),
                                       ),
@@ -224,7 +220,7 @@ class TransactionDetails extends StatelessWidget {
                                   )
                               ),
 
-                              SizedBox(height: Dimen.verticalMarginHeight * 1.5),
+                              SizedBox(height: Dimen.verticalMarginHeight(context) * 1.5),
                             ],
                           );
                         }
@@ -232,7 +228,7 @@ class TransactionDetails extends StatelessWidget {
                     ),
 
                     SizedBox(
-                      width: Dimen.width * 0.75,
+                      width: Dimen.width(context) * 0.75,
                       child: Center(
                         child: CustomText(
                           '${transaction.currency}$value',
@@ -252,10 +248,10 @@ class TransactionDetails extends StatelessWidget {
                       ),
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                    SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                     SizedBox(
-                      width: Dimen.width * 0.8,
+                      width: Dimen.width(context) * 0.8,
                       child: CustomText(
                         transaction.description.toUpperCase().isEmpty
                             ? transaction.title.toUpperCase() : transaction.description.toUpperCase(),
@@ -269,57 +265,64 @@ class TransactionDetails extends StatelessWidget {
                       ),
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight * 2),
+                    SizedBox(height: Dimen.verticalMarginHeight(context) * 2),
 
                     item(
+                      context,
                       title: "Transaction Type",
                       value: Constants.transactionType[transaction.type] ?? transaction.type,
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                    SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                     item(
+                      context,
                       title: "Transaction Fee",
                       value: '${transaction.currency}${transaction.fee.ceil()}',
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                    SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                     if(transaction.type == "ELCT")
                       item(
+                        context,
                         title: "Token",
                         value: transaction.token,
                       ),
 
                     if(transaction.token.isNotEmpty)
-                      SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                      SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                     item(
+                      context,
                       title: "Transaction Date",
                       value: DateFormat("LLLL dd, yyyy").format(transaction.time),
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                    SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                     item(
+                      context,
                       title: "Transaction Time",
                       value: DateFormat("hh:mm aa").format(transaction.time),
                     ),
 
                     if(transaction.name != "")
-                      SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                      SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                     if(transaction.name != "")
                       item(
+                        context,
                         title: transaction.isInFlow ? "Sender Name" : "Recipient Name",
                         value: transaction.name,
                       ),
 
                     if(transaction.detail != "")
-                      SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                      SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                     if(transaction.detail != "")
                       item(
+                        context,
                         title: transaction.isInFlow ? "Sender Details" : "Recipient Details",
                         value: transaction.detail,
                         showSeparator: !isOfflineTransaction
@@ -332,9 +335,10 @@ class TransactionDetails extends StatelessWidget {
                           } else {
                             return Column(
                               children: [
-                                SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                                SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                                 item(
+                                    context,
                                     title: "Reference ID",
                                     value: transaction.id,
                                     showSeparator: false
@@ -346,7 +350,7 @@ class TransactionDetails extends StatelessWidget {
                         }
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                    SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                   ],
                 ),
@@ -354,14 +358,14 @@ class TransactionDetails extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: Dimen.verticalMarginHeight * 2),
+          SizedBox(height: Dimen.verticalMarginHeight(context) * 2),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if(isComplete)
                 CustomButton(
-                  width: Dimen.width * 0.42,
+                  width: Dimen.width(context) * 0.42,
                   text: "Done",
                   onPressed: () {
                     if(isOfflineTransaction){
@@ -370,7 +374,7 @@ class TransactionDetails extends StatelessWidget {
                       Get.back();
                     }
                   },
-                  margin: EdgeInsets.only(left: Dimen.horizontalMarginWidth * 3),
+                  margin: EdgeInsets.only(left: Dimen.horizontalMarginWidth(context) * 3),
                   isOutlined: true
                 ),
 
@@ -378,7 +382,7 @@ class TransactionDetails extends StatelessWidget {
                 const Expanded(child: SizedBox()),
 
               CustomButton(
-                  width: isComplete ? Dimen.width * 0.42 : null,
+                  width: isComplete ? Dimen.width(context) * 0.42 : null,
                   text: "Show Receipt",
                   onPressed: () {
                     Get.to(() => TransactionReceipt(
@@ -386,24 +390,24 @@ class TransactionDetails extends StatelessWidget {
                     ), transition: Transition.fadeIn);
                   },
                   margin: EdgeInsets.only(
-                    right: isComplete ? Dimen.horizontalMarginWidth * 3 : 0
+                    right: isComplete ? Dimen.horizontalMarginWidth(context) * 3 : 0
                   ),
               ),
             ],
           ),
 
-          SizedBox(height: Dimen.verticalMarginHeight * 2),
+          SizedBox(height: Dimen.verticalMarginHeight(context) * 2),
 
         ],
       ),
     );
   }
 
-  Widget item({required String title, required String value, bool showSeparator = true}){
+  Widget item(BuildContext context, {required String title, required String value, bool showSeparator = true}){
     return Column(
       children: [
 
-        SizedBox(height: Dimen.verticalMarginHeight * 1.35),
+        SizedBox(height: Dimen.verticalMarginHeight(context) * 1.35),
 
         Row(
           mainAxisSize: MainAxisSize.min,
@@ -421,7 +425,7 @@ class TransactionDetails extends StatelessWidget {
               ),
             ),
 
-            SizedBox(width: Dimen.horizontalMarginWidth * 4),
+            SizedBox(width: Dimen.horizontalMarginWidth(context) * 4),
 
             Expanded(
               child: Row(
@@ -444,7 +448,7 @@ class TransactionDetails extends StatelessWidget {
             ),
 
             if(title == "Token")
-              SizedBox(width: Dimen.horizontalMarginWidth),
+              SizedBox(width: Dimen.horizontalMarginWidth(context)),
 
             if(title == "Token")
               SizedBox(
@@ -454,10 +458,10 @@ class TransactionDetails extends StatelessWidget {
                   padding: const EdgeInsets.all(0),
                   onPressed: (){
                     Clipboard.setData(ClipboardData(text: value));
-                    Snack.show(message: "Token copied successfully", type: SnackBarType.success);
+                    Snack.show(context, message: "Token copied successfully", type: SnackBarType.success);
                   },
                   child: Center(
-                    child: SvgPicture.asset(
+                    child: SVG(
                         'assets/icons/copy_address.svg',
                         height: 20,
                         width: 20,
@@ -471,7 +475,7 @@ class TransactionDetails extends StatelessWidget {
           ],
         ),
 
-        SizedBox(height: Dimen.verticalMarginHeight * 1.4),
+        SizedBox(height: Dimen.verticalMarginHeight(context) * 1.4),
 
         if(showSeparator)
           Container(

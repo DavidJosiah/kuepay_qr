@@ -5,7 +5,7 @@ import 'package:kuepay_qr/config/config.dart';
 
 class Snack {
 
-  Snack.show({
+  Snack.show(BuildContext context, {
       required String message,
       required SnackBarType type,
       bool floating = false,
@@ -14,9 +14,9 @@ class Snack {
       Widget? icon
   }){
     final double maxWidth = floating
-        ? Dimen.width - (Dimen.horizontalMarginWidth * 6) <= 500
-          ? Dimen.width - (Dimen.horizontalMarginWidth * 6) : 500
-        : Dimen.width;
+        ? Dimen.width(context) - (Dimen.horizontalMarginWidth(context) * 6) <= 500
+          ? Dimen.width(context) - (Dimen.horizontalMarginWidth(context) * 6) : 500
+        : Dimen.width(context);
 
     final EdgeInsets margin = floating
         ? const EdgeInsets.only(bottom: 20)
@@ -47,7 +47,7 @@ class Snack {
           duration: permanent ? null : const Duration(milliseconds: 1500),
           backgroundColor: getBackgroundColor(type),
           padding: floating ? EdgeInsets.symmetric(
-            horizontal: Dimen.horizontalMarginWidth * 3,
+            horizontal: Dimen.horizontalMarginWidth(context) * 3,
             vertical: 20,
           ) : const EdgeInsets.symmetric(
             horizontal: 15,

@@ -21,26 +21,26 @@ class CustomText extends StatelessWidget {
     return Builder(
       builder: (context) {
         return ResponsiveWidget(
-          largeScreen: getChild(0),
-          mediumScreen: getChild(1),
-          smallScreen: getChild(2),
-          extraSmallScreen: getChild(3),
+          largeScreen: getChild(context, 0),
+          mediumScreen: getChild(context, 1),
+          smallScreen: getChild(context, 2),
+          extraSmallScreen: getChild(context, 3),
         );
       }
     );
   }
 
-  Text getChild(int currentIndex){
+  Text getChild(BuildContext context, int currentIndex){
     return Text(
         text,
-        style: responsiveStyle(style, currentIndex: currentIndex),
+        style: responsiveStyle(context, style, currentIndex: currentIndex),
         maxLines: maxLines ?? 1,
         overflow: overflow ?? TextOverflow.ellipsis,
         textAlign: textAlign ?? TextAlign.center
     );
   }
 
-  static TextStyle responsiveStyle(TextStyle textStyle, {int currentIndex = -1}){
+  static TextStyle responsiveStyle(BuildContext context, TextStyle textStyle, {int currentIndex = -1}){
     List<TextStyle> textStyles = [
 
       TextStyles(color: textStyle.color).textBodySmall,
@@ -105,16 +105,16 @@ class CustomText extends StatelessWidget {
     }
 
     if(currentIndex == -1) {
-      if (ResponsiveWidget.isLargeScreen()) {
+      if (ResponsiveWidget.isLargeScreen(context)) {
         currentIndex = 0;
       }
-      else if (ResponsiveWidget.isMediumScreen()) {
+      else if (ResponsiveWidget.isMediumScreen(context)) {
         currentIndex = 1;
       }
-      else if (ResponsiveWidget.isSmallScreen()) {
+      else if (ResponsiveWidget.isSmallScreen(context)) {
         currentIndex = 2;
       }
-      else if (ResponsiveWidget.isExtraSmallScreen()) {
+      else if (ResponsiveWidget.isExtraSmallScreen(context)) {
         currentIndex = 3;
       }
     }

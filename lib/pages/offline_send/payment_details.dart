@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:kuepay_qr/controllers/controllers.dart';
@@ -56,7 +55,7 @@ class PaymentDetails extends StatelessWidget {
                 onPressed: () {
                   controller.changeTab(controller.currentTab.value - 1);
                 },
-                icon: SvgPicture.asset(
+                icon: SVG(
                     'assets/icons/back_arrow.svg',
                     height: 24,
                     width: 24,
@@ -71,15 +70,15 @@ class PaymentDetails extends StatelessWidget {
             ),
             body: SingleChildScrollView(
               child: Container(
-                height: Dimen.height - 96,
-                width: Dimen.width,
-                padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 3),
+                height: Dimen.height(context) - 96,
+                width: Dimen.width(context),
+                padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 3),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                        width: Dimen.width - Dimen.horizontalMarginWidth * 6,
-                        margin: EdgeInsets.symmetric(vertical: Dimen.verticalMarginHeight),
+                        width: Dimen.width(context) - Dimen.horizontalMarginWidth(context) * 6,
+                        margin: EdgeInsets.symmetric(vertical: Dimen.verticalMarginHeight(context)),
                         color: Colors.transparent,
                         child: _ReceiversDetails(
                           receiversAddress: receiversAddress,
@@ -87,14 +86,14 @@ class PaymentDetails extends StatelessWidget {
                         )
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                    SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                     OfflineWalletItem(
                       title: "Offline Wallet",
                       subtitle: walletAddress,
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight * 2),
+                    SizedBox(height: Dimen.verticalMarginHeight(context) * 2),
 
                     GetX<OfflineDetailsController>(
                         builder: (controller) {
@@ -139,7 +138,7 @@ class PaymentDetails extends StatelessWidget {
                         }
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight),
+                    SizedBox(height: Dimen.verticalMarginHeight(context)),
 
                     CustomTextField(
                       enabled: false,
@@ -150,23 +149,23 @@ class PaymentDetails extends StatelessWidget {
                       keyboardType: TextInputType.name,
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight * 2),
+                    SizedBox(height: Dimen.verticalMarginHeight(context) * 2),
 
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          SizedBox(height: Dimen.verticalMarginHeight),
+                          SizedBox(height: Dimen.verticalMarginHeight(context)),
 
                           CustomButton(
                             text: "Proceed",
                             onPressed: () {
-                              _proceedWithTransaction(controller);
+                              _proceedWithTransaction(context, controller);
                             },
                             margin: EdgeInsets.zero,
                           ),
 
-                          SizedBox(height: Dimen.verticalMarginHeight * 2),
+                          SizedBox(height: Dimen.verticalMarginHeight(context) * 2),
 
                         ],
                       ),
@@ -197,11 +196,11 @@ class PaymentDetails extends StatelessWidget {
     return true;
   }
 
-  Future<void> _proceedWithTransaction (OfflineDetailsController controller) async {
+  Future<void> _proceedWithTransaction (BuildContext context, OfflineDetailsController controller) async {
     if(validateField(controller)){
 
       showModalBottomSheet(
-        context: Get.context!,
+        context: context,
         backgroundColor: CustomColors.dynamicColor(colorScheme: ColorThemeScheme.background),
         constraints: const BoxConstraints(maxHeight: 560),
         isScrollControlled: true,
@@ -257,8 +256,8 @@ class _ReceiversDetails extends StatelessWidget {
                     ),
                     color: CustomColors.primary,
                   ),
-                  child: ClipRRect(
-                      borderRadius: const BorderRadius.all(
+                  child: const ClipRRect(
+                      borderRadius: BorderRadius.all(
                           Radius.circular(10)
                       ),
                       child: FittedBox(
@@ -267,7 +266,7 @@ class _ReceiversDetails extends StatelessWidget {
                           height: 45,
                           width: 45,
                           child: Center(
-                            child: SvgPicture.asset(
+                            child: SVG(
                                 'assets/icons/profile.svg',
                                 height: 22,
                                 width: 22,
@@ -292,7 +291,7 @@ class _ReceiversDetails extends StatelessWidget {
                         ).textSubtitleLarge
                     ),
 
-                    SizedBox(height: Dimen.verticalMarginHeight * 0.25),
+                    SizedBox(height: Dimen.verticalMarginHeight(context) * 0.25),
 
                     CustomText(
                       receiversName,

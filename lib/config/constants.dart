@@ -20,9 +20,6 @@ class Constants {
 
   static const String nairaSign = "N";
 
-  //TODO get key from backend and work with Android key pass
-  static const String hmacEncryptionKey = "759Hdh\$278373Lkd*253577Hsg2";
-
   static Map<String, String> transactionType = {
     "TRF" : "Bank Transfer",
     "FND" : "Wallet Fund",

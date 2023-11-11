@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:kuepay_qr/controllers/controllers.dart';
@@ -37,7 +36,7 @@ class ConfirmOfflineDetails extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () => Get.back(),
-                icon: SvgPicture.asset(
+                icon: SVG(
                     'assets/icons/cancel.svg',
                     height: 24,
                     width: 24,
@@ -48,7 +47,7 @@ class ConfirmOfflineDetails extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(width: Dimen.horizontalMarginWidth)
+              SizedBox(width: Dimen.horizontalMarginWidth(context))
             ],
             leading: const SizedBox(),
             title: CustomText(
@@ -62,23 +61,25 @@ class ConfirmOfflineDetails extends StatelessWidget {
           ),
           backgroundColor: Colors.transparent,
           body: Container(
-            width: Dimen.width,
+            width: Dimen.width(context),
             color: CustomColors.dynamicColor(
                 colorScheme: ColorThemeScheme.background
             ),
-            padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 3),
+            padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 3),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
 
-                SizedBox(height: Dimen.verticalMarginHeight),
+                SizedBox(height: Dimen.verticalMarginHeight(context)),
 
                 item(
+                  context,
                   title: "Recipient Name",
                   value: receiversName,
                 ),
 
                 item(
+                  context,
                   title: "Wallet Address",
                   value: receiversAddress,
                 ),
@@ -86,11 +87,13 @@ class ConfirmOfflineDetails extends StatelessWidget {
                 BrokenLineSeparator(color: CustomColors.dynamicColor(colorScheme: ColorThemeScheme.greyAccentTwo)),
 
                 item(
+                  context,
                   title: "Amount",
                   value: '$currency$amount',
                 ),
 
                 item(
+                  context,
                   title: "Fee",
                   value: '$currency$fee',
                 ),
@@ -98,6 +101,7 @@ class ConfirmOfflineDetails extends StatelessWidget {
                 BrokenLineSeparator(color: CustomColors.dynamicColor(colorScheme: ColorThemeScheme.greyAccentTwo)),
 
                 item(
+                  context,
                   title: "Total Amount",
                   value: '$currency$total',
                 ),
@@ -106,7 +110,7 @@ class ConfirmOfflineDetails extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      SizedBox(height: Dimen.verticalMarginHeight),
+                      SizedBox(height: Dimen.verticalMarginHeight(context)),
 
                       CustomButton(
                         text: "Send",
@@ -115,7 +119,7 @@ class ConfirmOfflineDetails extends StatelessWidget {
                         },
                       ),
 
-                      SizedBox(height: Dimen.verticalMarginHeight * 2),
+                      SizedBox(height: Dimen.verticalMarginHeight(context) * 2),
                     ],
                   ),
                 ),
@@ -127,11 +131,11 @@ class ConfirmOfflineDetails extends StatelessWidget {
     );
   }
 
-  Widget item({required String title, required String value}){
+  Widget item(BuildContext context, {required String title, required String value}){
     return Padding(
       padding: EdgeInsets.symmetric(
-          vertical: Dimen.verticalMarginHeight * 1.4,
-          horizontal: Dimen.horizontalMarginWidth
+          vertical: Dimen.verticalMarginHeight(context) * 1.4,
+          horizontal: Dimen.horizontalMarginWidth(context)
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -145,7 +149,7 @@ class ConfirmOfflineDetails extends StatelessWidget {
             ).textBodyExtraLarge,
           ),
 
-          SizedBox(width: Dimen.horizontalMarginWidth * 2.5),
+          SizedBox(width: Dimen.horizontalMarginWidth(context) * 2.5),
 
           Expanded(
             child: Align(
@@ -171,10 +175,10 @@ class ConfirmOfflineDetails extends StatelessWidget {
   void _proceedWithTransaction(BuildContext context, OfflineDetailsController controller, String total) {
 
     if(controller.walletBalance.toDouble() < double.parse(total)){
-      Snack.show(message: "Insufficient Balance", type: SnackBarType.error);
+      Snack.show(context, message: "Insufficient Balance", type: SnackBarType.error);
       return;
     }else if(controller.availableLimit.toDouble() < double.parse(total)){
-      Snack.show(message: "Limit Exceeded", type: SnackBarType.error);
+      Snack.show(context, message: "Limit Exceeded", type: SnackBarType.error);
       return;
     }
 

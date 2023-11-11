@@ -25,7 +25,7 @@ class AuthorizeOfflineSend extends StatelessWidget {
       PinKeyboard(
         offlinePin: pin,
         onButtonClick: () {
-          QRTransaction.completeOfflineSend(controller);
+          QRTransaction.completeOfflineSend(context, controller);
         },
       )
     ];

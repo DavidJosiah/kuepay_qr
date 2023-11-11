@@ -1,7 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:kuepay_qr/config/config.dart';
@@ -10,11 +11,11 @@ import 'package:kuepay_qr/shared/shared.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRDialog {
-  QRDialog.show({required String data}){
+  QRDialog.show(BuildContext context, {required String data}){
     final GlobalKey repaintKey = GlobalKey();
 
-    showDialog(context: Get.context!, builder: (BuildContext context) {
-      final width = Dimen.width * 0.9;
+    showDialog(context: context, builder: (BuildContext context) {
+      final width = Dimen.width(context) * 0.9;
       const horizontalPadding = 20.0;
 
       return AlertDialog(
@@ -56,7 +57,7 @@ class QRDialog {
                       child: Container(
                         height: availableWidth,
                         width: availableWidth,
-                        padding: EdgeInsets.all(Dimen.horizontalMarginWidth),
+                        padding: EdgeInsets.all(Dimen.horizontalMarginWidth(context)),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           color: CustomColors.primary[3],
@@ -68,15 +69,15 @@ class QRDialog {
                               QrImageView(
                                 data: data,
                                 size: availableWidth -
-                                    (Dimen.horizontalMarginWidth * 2),
+                                    (Dimen.horizontalMarginWidth(context) * 2),
                               ),
 
-                              SvgPicture.asset(
+                              SVG(
                                   'assets/images/qr_logo_green.svg',
                                   height: (availableWidth -
-                                      (Dimen.horizontalMarginWidth * 2)) * 0.17,
+                                      (Dimen.horizontalMarginWidth(context) * 2)) * 0.17,
                                   width: (availableWidth -
-                                      (Dimen.horizontalMarginWidth * 2)) * 0.17,
+                                      (Dimen.horizontalMarginWidth(context) * 2)) * 0.17,
                                   semanticsLabel: "QR Logo"
                               ),
                             ],
@@ -88,7 +89,7 @@ class QRDialog {
                     const SizedBox(height: 20),
 
                     CustomButton(
-                      height: Dimen.height * 0.06,
+                      height: Dimen.height(context) * 0.06,
                       onPressed: () {
                         _saveQR(context, repaintKey);
                       },
@@ -98,7 +99,7 @@ class QRDialog {
                     const SizedBox(height: 10),
 
                     CustomButton(
-                      height: Dimen.height * 0.06,
+                      height: Dimen.height(context) * 0.06,
                       onPressed: () {
                         Get.back();
                       },
@@ -130,7 +131,7 @@ class QRDialog {
 
       if(result) {
         Get.back();
-        Snack.show(message: "QR saved successfully", type: SnackBarType.info);
+        Snack.show(context, message: "QR saved successfully", type: SnackBarType.info);
       }
     } catch (e) {
       if (kDebugMode) {

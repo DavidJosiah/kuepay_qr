@@ -1,94 +1,106 @@
 import 'dart:convert';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:kuepay_qr/config/config.dart';
+
+import 'offline_wallet.dart';
 
 class UserData {
 
-  static SharedPreferences? prefInstance;
-
-  static Future<SharedPreferences> get _pref async {
-    prefInstance ??= await SharedPreferences.getInstance();
-    return prefInstance!;
-  }
+  static final prefs = Prefs();
 
   static Future<Map<String, dynamic>> get details async {
     final String mUserId = await userId;
     final String mName = await name;
     final double mAvailableLimit = await availableLimit;
-    final String mEncryptedPin = await pin;
+    final String mPin = await pin;
 
     return {
       "userId": mUserId,
       "name": mName,
       "availableLimit": mAvailableLimit,
-      "pin": mEncryptedPin,
+      "pin": mPin,
     };
   }
 
+  static Future<bool> get hasUserSetID async {
+    final result = await userId;
+    return result != "USER ID";
+  }
+
   static Future<String> get userId async {
-    final pref = await _pref;
-    final String mUserId = pref.getString('userId') ?? await Utils.encryptVariable("USER ID");
-    final decrypted = await Utils.decryptVariable(mUserId);
+    return await prefs.uID;
+  }
+
+  static Future<String> get accessToken async {
+    final String mAccessToken = await prefs.getString('accessToken') ?? await Utils.encryptVariable("ACCESS TOKEN");
+    final decrypted = await Utils.decryptVariable(mAccessToken);
     return jsonDecode(decrypted);
   }
 
   static Future<String> get name async {
-    final pref = await _pref;
-    final String mName = pref.getString('name') ?? await Utils.encryptVariable("NAME");
+    final String mName = await prefs.getString('name') ?? await Utils.encryptVariable("NAME");
     final decrypted = await Utils.decryptVariable(mName);
     return jsonDecode(decrypted);
   }
 
   static Future<double> get availableLimit async {
-    final pref = await _pref;
-    final String mAvailableLimit = pref.getString('availableLimit') ?? await Utils.encryptVariable(50000);
+    final String mAvailableLimit = await prefs.getString('availableLimit') ?? await Utils.encryptVariable(50000);
     final decrypted = await Utils.decryptVariable(mAvailableLimit);
     return (jsonDecode(decrypted) as num).toDouble();
   }
 
-  static Future<String> get pin async {
-    final pref = await _pref;
-    final defaultPin = await Utils.encryptVariable(await Utils.encryptVariableHMAC('pin'));
+  static Future<bool> get hasUserSetPin async {
+    final result = await pin;
+    return result.length == 4;
+  }
 
-    final String mEncryptedPin = pref.getString('encryptedPin') ?? defaultPin;
-    final decrypted = await Utils.decryptVariable(mEncryptedPin);
+  static Future<String> get pin async {
+    final String mPin = await prefs.getString('pin') ?? await Utils.encryptVariable('pin');
+    final decrypted = await Utils.decryptVariable(mPin);
     return jsonDecode(decrypted);
   }
 
+  static Future<void> setAccessToken(String value) async {
+    if(value.trim().isNotEmpty) {
+      await prefs.setString(
+          'accessToken', await Utils.encryptVariable(value));
+    }
+  }
+
   static Future<void> setUserId(String value) async {
-    if(value.trim().isNotEmpty){
-      final pref = await _pref;
-      await pref.setString('userId', await Utils.encryptVariable(value));
+    if(value.trim().isNotEmpty) {
+      await prefs.setUID(value);
     }
   }
 
   static Future<void> setName(String value) async {
-    if(value.trim().isNotEmpty){
-      final pref = await _pref;
-      await pref.setString('name', await Utils.encryptVariable(value));
+    if(value.trim().isNotEmpty) {
+      await prefs.setString('name', await Utils.encryptVariable(value));
     }
   }
 
   static Future<void> setAvailableLimit(double value) async {
-    if(value.toString().trim().isNotEmpty) {
-      final pref = await _pref;
-      await pref.setString('availableLimit', await Utils.encryptVariable(value));
-    }
+    await prefs.setString('availableLimit', await Utils.encryptVariable(value));
   }
 
   static Future<void> setPin(String value) async {
-    if(value.trim().isNotEmpty){
-      final pref = await _pref;
-      await pref.setString('encryptedPin', await Utils.encryptVariable(value));
+    if(value.trim().isNotEmpty) {
+      await prefs.setString('pin', await Utils.encryptVariable(value));
     }
   }
 
   static Future<void> resetLimit() async {
-    final pref = await _pref;
+    await prefs.setString('availableLimit', await Utils.encryptVariable(50000));
+  }
 
-    //TODO make dynamic based on kyc
-    await pref.setString('availableLimit', await Utils.encryptVariable(50000));
+  static Future<bool> isDataComplete() async {
+
+    if(!await UserData.hasUserSetID) return false;
+    if(!await UserData.hasUserSetPin) return false;
+    if((await UserData.name).isEmpty) return false;
+    if((await OfflineWallet.address).isEmpty) return false;
+    if((await OfflineWallet.details).isEmpty) return false;
+
+    return true;
   }
 }

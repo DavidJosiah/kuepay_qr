@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:kuepay_qr/config/config.dart';
@@ -27,7 +26,7 @@ class OfflineDisplayQR extends StatelessWidget {
             onPressed: () {
               controller.changeTab(controller.currentTab.value - 1);
             },
-            icon: SvgPicture.asset(
+            icon: SVG(
                 'assets/icons/back_arrow.svg',
                 height: 24,
                 width: 24,
@@ -66,17 +65,17 @@ class _Body extends StatelessWidget {
     final controller = Get.find<OfflineDetailsController>();
 
     return Container(
-      width: Dimen.width,
-      padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 3),
+      width: Dimen.width(context),
+      padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 3),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
 
-          SizedBox(height: Dimen.verticalMarginHeight * 2),
+          SizedBox(height: Dimen.verticalMarginHeight(context) * 2),
 
           SizedBox(
-              width: Dimen.width - Dimen.horizontalMarginWidth * 6,
+              width: Dimen.width(context) - Dimen.horizontalMarginWidth(context) * 6,
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   return OfflineQRCode(
@@ -87,11 +86,11 @@ class _Body extends StatelessWidget {
               )
           ),
 
-          SizedBox(height: Dimen.verticalMarginHeight * 2),
+          SizedBox(height: Dimen.verticalMarginHeight(context) * 2),
 
           Container(
               width: double.infinity,
-              padding: EdgeInsets.all(Dimen.horizontalMarginWidth * 2),
+              padding: EdgeInsets.all(Dimen.horizontalMarginWidth(context) * 2),
               decoration: BoxDecoration(
                   color: CustomColors.primary,
                   borderRadius: BorderRadius.circular(10)
@@ -106,8 +105,8 @@ class _Body extends StatelessWidget {
                             color: CustomColors.primary[2],
                             borderRadius: BorderRadius.circular(18)
                         ),
-                        child: Center(
-                          child: SvgPicture.asset(
+                        child: const Center(
+                          child: SVG(
                               'assets/icons/idea.svg',
                               height: 24,
                               width: 24,
@@ -125,7 +124,7 @@ class _Body extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(vertical: Dimen.verticalMarginHeight * 0.5),
+                              padding: EdgeInsets.symmetric(vertical: Dimen.verticalMarginHeight(context) * 0.5),
                               child: Builder(
                                   builder: (context) {
                                     String text = "";
@@ -162,9 +161,9 @@ class _Body extends StatelessWidget {
           Builder(
             builder: (context) {
               if(isFull){
-                return Expanded(child: SizedBox(height: Dimen.verticalMarginHeight * 2));
+                return Expanded(child: SizedBox(height: Dimen.verticalMarginHeight(context) * 2));
               } else {
-                return SizedBox(height: Dimen.verticalMarginHeight * 2);
+                return SizedBox(height: Dimen.verticalMarginHeight(context) * 2);
               }
             }
           ),
@@ -173,20 +172,20 @@ class _Body extends StatelessWidget {
               text: controller.currentTab.value == 2 ? "Finish" : "Continue",
               onPressed: () async {
                 controller.currentTab.value == 2
-                    ? confirmReceiverScan(controller)
+                    ? confirmReceiverScan(context, controller)
                     : controller.changeTab(controller.currentTab.value + 1);
               }
           ),
 
-          SizedBox(height: Dimen.verticalMarginHeight * 3),
+          SizedBox(height: Dimen.verticalMarginHeight(context) * 3),
         ],
       ),
     );
   }
 
-  void confirmReceiverScan (OfflineDetailsController controller) {
+  void confirmReceiverScan (BuildContext context, OfflineDetailsController controller) {
     showConfirmationDialog(
-        parentContext: Get.context!,
+        parentContext: context,
         icon: 'assets/icons/round_error.svg',
         title: "Finish Transaction",
         confirmationText: "Confirmed",

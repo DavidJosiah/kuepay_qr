@@ -20,14 +20,15 @@ class TransactionDatabase{
     String path = "/completeOfflineTransaction";
     String url = '$transactionsBase$path';
 
-    final String hmacEncryption = await Utils.encryptVariableHMAC(encryptedData);
+    //TODO
+    final String hmacEncryption = encryptedData;
 
     final body = json.encode({
       "encryptedValue": hmacEncryption,
       "transactionDetails": encryptedData,
     });
 
-    final data = await postRequest(url, body, verifyToken: false);
+    final data = await postRequest(url, body);
 
     return data["success"] ?? false;
   }
@@ -59,15 +60,16 @@ class TransactionDatabase{
       "s_WA": senderWalletAddress,
     };
 
+    //TODO
     final encryptedData = await Utils.encryptVariable(input);
-    final String hmacEncryption = await Utils.encryptVariableHMAC(encryptedData);
+    final String hmacEncryption = encryptedData;
 
     final body = json.encode({
       "encryptedValue": hmacEncryption,
       "transactionDetails": encryptedData,
     });
 
-    final data = await postRequest(url, body, verifyToken: true);
+    final data = await postRequest(url, body);
 
     if(data["success"] ?? false) {
       return [
@@ -119,15 +121,16 @@ class TransactionDatabase{
       "s_WA": senderWalletAddress,
     };
 
+    //TODO
     final encryptedData = await Utils.encryptVariable(input);
-    final String hmacEncryption = await Utils.encryptVariableHMAC(encryptedData);
+    final String hmacEncryption = encryptedData;
 
     final body = json.encode({
       "encryptedValue": hmacEncryption,
       "transactionDetails": encryptedData,
     });
 
-    final data = await postRequest(url, body, verifyToken: true, returnData: false);
+    final data = await postRequest(url, body, returnData: false);
 
     if(data["success"] ?? false) {
       final String reference = data["data"]["data"]?["transactionReference"] ?? "";

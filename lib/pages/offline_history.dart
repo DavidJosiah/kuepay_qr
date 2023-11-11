@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:kuepay_qr/config/config.dart';
@@ -50,7 +49,7 @@ class OfflineHistoryState extends State<OfflineHistory> with TickerProviderState
               final controller = Get.find<KuepayOfflineController>();
               controller.home();
             },
-            icon: SvgPicture.asset(
+            icon: SVG(
                 'assets/icons/back_arrow.svg',
                 height: 24,
                 width: 24,
@@ -138,7 +137,7 @@ class OfflineHistoryState extends State<OfflineHistory> with TickerProviderState
 
               Expanded(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 1.5),
+                    padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 1.5),
                     child: _List(tabController, isLoading: isLoading, items: items),
                   )
               )
@@ -238,11 +237,11 @@ class _List extends StatelessWidget {
                 children: [
                   if(!isLoading)
                     SizedBox(
-                      width: Dimen.width,
+                      width: Dimen.width(context),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(
+                          const SVG(
                               'assets/images/empty_fund_history.svg',
                               height: 150,
                               width: 220,
@@ -271,7 +270,7 @@ class _List extends StatelessWidget {
                         shrinkWrap: true,
                         itemCount: 10,
                         scrollDirection: Axis.vertical,
-                        padding: EdgeInsets.only(bottom: Dimen.verticalMarginHeight * 3),
+                        padding: EdgeInsets.only(bottom: Dimen.verticalMarginHeight(context) * 3),
                         itemBuilder: (BuildContext context, int index) {
                           return const DefaultTransactionItem();
                         }
@@ -289,7 +288,7 @@ class _List extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: length,
                       scrollDirection: Axis.vertical,
-                      padding: EdgeInsets.only(bottom: Dimen.verticalMarginHeight * 3),
+                      padding: EdgeInsets.only(bottom: Dimen.verticalMarginHeight(context) * 3),
                       itemBuilder: (BuildContext context, int index) {
                         return TransactionItem(transaction: filteredItems[index], isOfflineTransaction: true);
                       }

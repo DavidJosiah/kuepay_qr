@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
+import 'package:kuepay_qr/logic/logic.dart';
+import 'package:kuepay_qr/shared/shared.dart';
 
 import 'package:kuepay_qr/config/config.dart';
 
@@ -16,101 +18,98 @@ class Auth {
     Api.showErrorMessage(message);
   }
 
-  Future<Map> accessSignIn() async {
 
-    String path = "/accessSignIn";
-    String url = '$base$path';
-
-    final prefs = await SharedPreferences.getInstance();
-
-    String token = prefs.getString('accessToken') ?? "";
-
-    final body = json.encode({
-      "token": token,
-    });
-
-    final results = await postRequest(url, body, isSignIn: true, verifyToken: false);
-
-    return results;
-  }
-
-  Future<String> getPin() async {
-    if(Utils.uID.isEmpty) return "";
-
-    String path = "/getPin?userId=${Utils.uID}";
-    String url = '$base$path';
-
-    final data = await getRequest(url);
-    return data["pin"] ?? "";
-  }
-
-  Future<bool> verifyPin({
-    required String pin,
-  }) async {
-
-    String path = "/verifyPin";
-    String url = '$base$path';
-
-    final body = json.encode({
-      "pin": pin,
-    });
-
-    final data = await postRequest(url, body);
-    return data["success"] ?? false;
-  }
-
-  Future<bool> createTransactionPin({
-    required String pin,
-  }) async {
-
-    String path = "/transaction-pin-setup";
-    String url = '$base$path';
-
-    final body = json.encode({
-      "transactionPin": pin,
-      "isNew": true
-    });
-
-    final data = await postRequest(url, body);
-    return data["success"] ?? false;
-  }
-
-  Future<bool> updateTransactionPin({
-    required String pin,
-  }) async {
-
-    String path = "/transaction-pin-setup";
-    String url = '$base$path';
-
-    final body = json.encode({
-      "transactionPin": pin,
-      "isNew": false
-    });
-
-    final data = await postRequest(url, body);
-    if(data["success"] ?? false){
-      Utils.getPin();
-    }
-    return data["success"] ?? false;
-  }
-
-  Future<String> sendOtp({
+  Future<String> signUp({
+    required String name,
     required String phoneNumber,
-    String emailAddress = "",
+    required String password,
+    required String pin,
   }) async {
 
-    String path = "/sendOtp";
+    if(pin.length != 4){
+      Toast.show(message: "Pin should be 4-digit", type: ToastType.error);
+      return "";
+    }
+
+    String path = "/signup";
     String url = '$base$path';
 
-
     final body = json.encode({
+      "name" : name,
       "phoneNumber": phoneNumber,
-      "emailAddress": emailAddress,
+      "password": password,
     });
 
-    final data = await postRequest(url, body, verifyToken: false);
+    final data = await postRequest(url, body, isSignUp: true);
 
-    return data["data"]?["otpCode"] ?? "";
+    final result = data["success"] ?? false;
+
+    if(result){
+      await setPin(pin);
+    }
+
+    return data["data"]["uID"] ?? "";
   }
 
+  Future<bool> signIn({
+    required String userID,
+    required String password,
+  }) async {
+
+    String path = "/login";
+    String url = '$base$path';
+
+    final body = json.encode({
+      "userID": userID,
+      "password": password,
+    });
+
+    final result = await postRequest(url, body, isSignIn: true);
+
+    if (result.isNotEmpty) {
+      final userID = result['data']['userId'];
+      final name = result['data']['name'];
+
+      final walletAddress = result['data']['walletAddress'];
+      final walletId = result['data']['walletId'];
+
+      UserData.setUserId(userID);
+      UserData.setName(name);
+      UserData.resetLimit();
+
+      OfflineWallet.setAddress(walletAddress);
+      OfflineWallet.setBalance("0");
+      OfflineWallet.setCurrency(Constants.nairaSign);
+      OfflineWallet.setId(walletId);
+
+      UserData.setAccessToken(result['token']['accesstoken']);
+    }
+
+    return result.isNotEmpty;
+  }
+
+  Future<bool> verifyPin({required String pin}) async {
+    final userPin = await UserData.pin;
+    return userPin == pin;
+  }
+
+  Future<void> setPin(String pin) async {
+    if(pin.length != 4){
+      Toast.show(message: "Pin should be a 4-digit number", type: ToastType.error);
+      return;
+    }
+
+    try {
+      int.parse(pin);
+    } on Exception catch (e) {
+      if(kDebugMode) {
+        print(e.toString());
+      }
+
+      Toast.show(message: "Pin should be a 4-digit number", type: ToastType.error);
+      return;
+    }
+
+    UserData.setPin(pin);
+  }
 }

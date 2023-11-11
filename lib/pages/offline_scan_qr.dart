@@ -1,5 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -53,7 +54,7 @@ class _OfflineScanQRState extends State<OfflineScanQR> {
                   controller.changeTab(controller.currentTab.value - 1);
                 }
               },
-              icon: SvgPicture.asset(
+              icon: SVG(
                   'assets/icons/back_arrow.svg',
                   height: 24,
                   width: 24,
@@ -69,7 +70,7 @@ class _OfflineScanQRState extends State<OfflineScanQR> {
             elevation: 0,
           ),
           body:  Container(
-            width: Dimen.width,
+            width: Dimen.width(context),
             color: CustomColors.dynamicColor(
                 colorScheme: ColorThemeScheme.background
             ),
@@ -79,14 +80,14 @@ class _OfflineScanQRState extends State<OfflineScanQR> {
 
                 const Expanded(flex: 4, child: SizedBox()),
 
-                SizedBox(height: Dimen.verticalMarginHeight),
+                SizedBox(height: Dimen.verticalMarginHeight(context)),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
 
-                    SvgPicture.asset(
+                    const SVG(
                         'assets/icons/square_error.svg',
                         height: 24,
                         width: 24,
@@ -113,22 +114,22 @@ class _OfflineScanQRState extends State<OfflineScanQR> {
                   ],
                 ),
 
-                SizedBox(height: Dimen.verticalMarginHeight),
+                SizedBox(height: Dimen.verticalMarginHeight(context)),
 
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    SvgPicture.asset(
+                    SVG(
                         'assets/images/scan_code.svg',
-                        height: Dimen.width * 0.85,
-                        width: Dimen.width * 0.85,
+                        height: Dimen.width(context) * 0.85,
+                        width: Dimen.width(context) * 0.85,
                         color: CustomColors.primary,
                         semanticsLabel: "Scan Code"
                     ),
 
                     Container(
-                      height: Dimen.width * 0.825,
-                      width: Dimen.width * 0.825,
+                      height: Dimen.width(context) * 0.825,
+                      width: Dimen.width(context) * 0.825,
                       color: CustomColors.dynamicColor(
                           colorScheme: ColorThemeScheme.background
                       ),
@@ -183,7 +184,7 @@ class _OfflineScanQRState extends State<OfflineScanQR> {
                                 builder: (context, state, child) {
                                   switch (state) {
                                     case TorchState.off:
-                                      return SvgPicture.asset(
+                                      return const SVG(
                                           'assets/icons/flash_activate.svg',
                                           height: 24,
                                           width: 24,
@@ -191,7 +192,7 @@ class _OfflineScanQRState extends State<OfflineScanQR> {
                                           semanticsLabel: "Activate Flash"
                                       );
                                     case TorchState.on:
-                                      return SvgPicture.asset(
+                                      return const SVG(
                                           'assets/icons/flash_deactivate.svg',
                                           height: 24,
                                           width: 24,
@@ -207,7 +208,7 @@ class _OfflineScanQRState extends State<OfflineScanQR> {
                           ),
                         ),
 
-                        SizedBox(height: Dimen.verticalMarginHeight * 0.5),
+                        SizedBox(height: Dimen.verticalMarginHeight(context) * 0.5),
 
                         CustomText(
                             "Flash",
@@ -247,7 +248,7 @@ class _OfflineScanQRState extends State<OfflineScanQR> {
     if(controller.currentTab.value == 0){
       QRTransaction.scanForOfflineSend(data, controller);
     } else if(controller.currentTab.value == 2) {
-      QRTransaction.scanForOfflineReceive(data, controller);
+      QRTransaction.scanForOfflineReceive(context, data, controller);
     }
   }
 }

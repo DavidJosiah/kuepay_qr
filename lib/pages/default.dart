@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import 'package:kuepay_qr/config/config.dart';
 import 'package:kuepay_qr/controllers/controllers.dart';
+import 'package:kuepay_qr/logic/logic.dart';
 import 'package:kuepay_qr/services/services.dart';
 import 'package:kuepay_qr/shared/shared.dart';
 
@@ -49,9 +50,10 @@ class _KuepayOfflineState extends State<KuepayOffline> {
             if(_source.values.toList()[0]) {
               controller.isOffline.value = false;
               if(controller.hasBeenOffline.value) {
-                Utils.completeOfflineTransactions();
+                Utils.completeOfflineTransactions(context);
                 controller.hasBeenOffline.value = false;
                 Snack.show(
+                  context,
                   message: "You are now online",
                   type: SnackBarType.info,
                 );
@@ -66,9 +68,10 @@ class _KuepayOfflineState extends State<KuepayOffline> {
               controller.isOffline.value = false;
 
               if(controller.hasBeenOffline.value) {
-                Utils.completeOfflineTransactions();
+                Utils.completeOfflineTransactions(context);
                 controller.hasBeenOffline.value = false;
                 Snack.show(
+                  context,
                   message: "You are now online",
                   type: SnackBarType.info,
                 );
@@ -98,12 +101,14 @@ class _KuepayOfflineState extends State<KuepayOffline> {
       });
 
       offlineTimer = Timer.periodic(const Duration(seconds: 5), (_) {
-        Utils.completeOfflineTransactions();
+        Utils.completeOfflineTransactions(context);
       });
 
       if(controller.isOffline.value == false){
-        Utils.completeOfflineTransactions();
+        Utils.completeOfflineTransactions(context);
       }
+
+      _setData();
     });
 
     super.initState();
@@ -133,6 +138,7 @@ class _KuepayOfflineState extends State<KuepayOffline> {
         GetX<KuepayOfflineController>(
           builder: (controller) {
             if(controller.isShowingScreen){
+            //TODO if(controller.isShowingScreen && controller.data.isNotEmpty){
               return const OfflineScreen();
             } else {
               return const SizedBox();
@@ -141,5 +147,18 @@ class _KuepayOfflineState extends State<KuepayOffline> {
         ),
       ],
     );
+  }
+
+  static Future<void> _setData() async {
+    if (await UserData.isDataComplete()) {
+      final Map<String, dynamic> userData = await UserData.details;
+      final Map<String, String> walletData = await OfflineWallet.details;
+
+      final Map<String, dynamic> data = userData;
+
+      data.addEntries(walletData.entries);
+
+      Get.find<KuepayOfflineController>().data = data;
+    }
   }
 }

@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -8,7 +11,6 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:kuepay_qr/logic/logic.dart';
 import 'package:kuepay_qr/config/config.dart';
 import 'package:kuepay_qr/controllers/controllers.dart';
-import 'package:kuepay_qr/services/services.dart';
 import 'package:kuepay_qr/shared/shared.dart';
 
 class QRTransaction {
@@ -37,7 +39,7 @@ class QRTransaction {
   }
 
   //Step 2 for Offline Receive
-  static void scanForOfflineReceive (Map data, OfflineDetailsController controller) {
+  static void scanForOfflineReceive (BuildContext context, Map data, OfflineDetailsController controller) {
     if (data[Constants.receiverID] == controller.userId
         && data[Constants.time] == controller.time.value
         && data[Constants.senderID] != null) {
@@ -49,7 +51,7 @@ class QRTransaction {
           Constants.senderWalletAddress: data[Constants.senderWalletAddress],
         };
 
-        completeOfflineReceive(newData, controller);
+        completeOfflineReceive(context, newData, controller);
 
       } else {
         Utils.stopLoading();
@@ -65,7 +67,7 @@ class QRTransaction {
   }
 
   //Step 3 for Offline Receive
-  static void completeOfflineReceive (Map newData, OfflineDetailsController controller) async {
+  static void completeOfflineReceive (BuildContext context, Map newData, OfflineDetailsController controller) async {
     final receiverData = controller.decryptedData;
 
     final value = num.parse(receiverData[Constants.value] ?? "0").ceil();
@@ -85,7 +87,7 @@ class QRTransaction {
 
     final encryptedData = await Utils.encryptVariable(fullData);
 
-    await OfflineTransactions.add(encryptedData);
+    await OfflineTransactions.add(context, encryptedData);
     Utils.stopLoading();
 
 
@@ -176,7 +178,7 @@ class QRTransaction {
   }
 
   //Step 3 for Offline Send
-  static void completeOfflineSend  (OfflineDetailsController controller) async {
+  static void completeOfflineSend (BuildContext context, OfflineDetailsController controller) async {
 
     final receiverData = controller.decryptedData;
 
@@ -203,7 +205,7 @@ class QRTransaction {
 
     final encryptedData = await Utils.encryptVariable(fullData);
 
-    await OfflineTransactions.add(encryptedData);
+    await OfflineTransactions.add(context, encryptedData);
     Utils.stopSheetLoading();
 
     //Encrypt data required for receiver to complete transaction

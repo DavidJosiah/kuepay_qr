@@ -1,28 +1,23 @@
-import 'package:shared_preferences/shared_preferences.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:flutter/cupertino.dart';
 
 import 'package:kuepay_qr/shared/shared.dart';
 import 'package:kuepay_qr/config/config.dart';
 
 class OfflineTransactions {
 
-  static SharedPreferences? prefInstance;
-
-  static Future<SharedPreferences> get _pref async {
-    prefInstance ??= await SharedPreferences.getInstance();
-    return prefInstance!;
-  }
+  static final prefs = Prefs();
 
   static Future<List<String>> get transactions async {
-    final pref = await _pref;
-    final offlineTransactions = pref.getStringList("offlineTransactions") ?? [];
+    final offlineTransactions = await prefs.getStringList("offlineTransactions") ?? [];
     return offlineTransactions;
   }
 
-  static Future<bool> isDataIntact () async {
-    final pref = await _pref;
+  static Future<bool> isDataIntact (BuildContext context) async {
 
     final offlineTransactionsList = await transactions;
-    final offlineTransactionsString = pref.getString("offlineTransactionsString") ?? "";
+    final offlineTransactionsString = await prefs.getString("offlineTransactionsString") ?? "";
 
     String decryptedOfflineTransactions = "";
 
@@ -30,21 +25,20 @@ class OfflineTransactions {
       decryptedOfflineTransactions = await Utils.decryptVariable(offlineTransactionsString);
 
       if(decryptedOfflineTransactions.isEmpty){
-        Snack.show(message: "User data has been compromised", type: SnackBarType.error);
+        Snack.show(context, message: "User data has been compromised", type: SnackBarType.error);
         return false;
       }
     } else if(offlineTransactionsList.isNotEmpty) {
-      Snack.show(message: "User data has been compromised", type: SnackBarType.error);
+      Snack.show(context, message: "User data has been compromised", type: SnackBarType.error);
       return false;
     }
     
     return true;
   }
 
-  static Future<void> add (String encrypted) async {
-    final pref = await _pref;
+  static Future<void> add (BuildContext context, String encrypted) async {
 
-    final isIntact = await isDataIntact();
+    final isIntact = await isDataIntact(context);
 
     if(isIntact){
       final offlineTransactionsList = await transactions;
@@ -52,15 +46,14 @@ class OfflineTransactions {
       final decryptedOfflineTransactions = offlineTransactionsList.toString();
       final encryptedOfflineTransactions = await Utils.encryptVariable(decryptedOfflineTransactions);
 
-      await pref.setString("offlineTransactionsString", encryptedOfflineTransactions);
-      await pref.setStringList("offlineTransactions", offlineTransactionsList);
+      await prefs.setString("offlineTransactionsString", encryptedOfflineTransactions);
+      await prefs.setStringList("offlineTransactions", offlineTransactionsList);
     }
   }
 
-  static Future<void> remove (String encrypted) async {
-    final pref = await _pref;
+  static Future<void> remove (BuildContext context, String encrypted) async {
 
-    final isIntact = await isDataIntact();
+    final isIntact = await isDataIntact(context);
 
     if(isIntact){
       final offlineTransactionsList = await transactions;
@@ -68,8 +61,8 @@ class OfflineTransactions {
       final decryptedOfflineTransactions = offlineTransactionsList.toString();
       final encryptedOfflineTransactions = await Utils.encryptVariable(decryptedOfflineTransactions);
 
-      await pref.setString("offlineTransactionsString", encryptedOfflineTransactions);
-      await pref.setStringList("offlineTransactions", offlineTransactionsList);
+      await prefs.setString("offlineTransactionsString", encryptedOfflineTransactions);
+      await prefs.setStringList("offlineTransactions", offlineTransactionsList);
     }
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:kuepay_qr/logic/logic.dart';
@@ -23,7 +22,7 @@ class TransactionItem extends StatelessWidget {
     }
 
     return Container(
-      width: Dimen.width,
+      width: Dimen.width(context),
       height: 72,
       margin: const EdgeInsets.only(top: 2, bottom: 2),
       decoration: BoxDecoration(
@@ -91,7 +90,7 @@ class TransactionItem extends StatelessWidget {
                                 padding: const EdgeInsets.all(8),
                                 child: FittedBox(
                                   fit: BoxFit.contain,
-                                  child: SvgPicture.asset(
+                                  child: SVG(
                                     transaction.imagePath,
                                     color: transaction.imagePath == 'assets/icons/cart.svg'
                                         ? CustomColors.white : null,

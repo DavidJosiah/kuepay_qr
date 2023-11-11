@@ -1,3 +1,4 @@
 library flutter_pkg;
 
-export 'offline/offline.dart';
+export 'pages/exported_pages.dart';
+export 'core/core.dart';

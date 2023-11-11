@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:kuepay_qr/config/config.dart';
 
 import 'custom_text.dart';
+import 'svg.dart';
 
 // ignore: must_be_immutable
 class CustomButton extends StatelessWidget {
@@ -46,7 +46,7 @@ class CustomButton extends StatelessWidget {
 
     return Container(
       height: height ?? 62,
-      width: width ?? Dimen.width * 0.9,
+      width: width ?? Dimen.width(context) * 0.9,
       decoration: BoxDecoration(
         color: color ?? CustomColors.primary,
         borderRadius: BorderRadius.all(
@@ -60,7 +60,7 @@ class CustomButton extends StatelessWidget {
       margin: margin ?? EdgeInsets.zero,
       child: MaterialButton(
         height: height ?? 62,
-        minWidth: width ?? Dimen.width * 0.9,
+        minWidth: width ?? Dimen.width(context) * 0.9,
         padding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
@@ -85,10 +85,10 @@ class CustomButton extends StatelessWidget {
                 ),
 
                 if(icon != null)
-                  SizedBox(width: Dimen.horizontalMarginWidth),
+                  SizedBox(width: Dimen.horizontalMarginWidth(context)),
 
                 if(icon != null)
-                  SvgPicture.asset(
+                  SVG(
                     icon!,
                     height: 24,
                     width: 24,

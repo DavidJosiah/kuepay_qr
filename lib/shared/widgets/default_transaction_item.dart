@@ -22,7 +22,7 @@ class DefaultTransactionItem extends StatelessWidget {
     ]);
 
     return Container(
-      width: Dimen.width,
+      width: Dimen.width(context),
       height: 72,
       margin: const EdgeInsets.only(top: 2, bottom: 2),
       decoration: BoxDecoration(
@@ -100,7 +100,7 @@ class DefaultTransactionItem extends StatelessWidget {
                                               Shimmer(
                                                 child: Container(
                                                   height: 16,
-                                                  width: Dimen.width * 0.35,
+                                                  width: Dimen.width(context) * 0.35,
                                                   color: colors[2].withOpacity(0.5),
                                                 ),
                                               ),
@@ -110,7 +110,7 @@ class DefaultTransactionItem extends StatelessWidget {
                                               Shimmer(
                                                 child: Container(
                                                   height: 16,
-                                                  width: Dimen.width * 0.28,
+                                                  width: Dimen.width(context) * 0.28,
                                                   color: colors[2].withOpacity(0.5),
                                                 ),
                                               ),
@@ -128,7 +128,7 @@ class DefaultTransactionItem extends StatelessWidget {
                                               child:  Shimmer(
                                                 child: Container(
                                                   height: 24,
-                                                  width: Dimen.width * 0.25,
+                                                  width: Dimen.width(context) * 0.25,
                                                   color: colors[2].withOpacity(0.5),
                                                 ),
                                               ),

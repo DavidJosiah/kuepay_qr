@@ -22,8 +22,8 @@ class BalanceWidget extends StatelessWidget {
       children: [
         Container(
             padding: EdgeInsets.symmetric(
-              horizontal: Dimen.horizontalMarginWidth * 1.5,
-              vertical: Dimen.verticalMarginHeight * 0.5
+              horizontal: Dimen.horizontalMarginWidth(context) * 1.5,
+              vertical: Dimen.verticalMarginHeight(context) * 0.5
             ),
             decoration: BoxDecoration(
               border: Border.all(
@@ -53,7 +53,7 @@ class BalanceWidget extends StatelessWidget {
                       ).textBodyExtraLarge,
                     ),
 
-                    SizedBox(width: Dimen.horizontalMarginWidth),
+                    SizedBox(width: Dimen.horizontalMarginWidth(context)),
 
                     CustomText(
                       balance,
@@ -83,7 +83,7 @@ class BalanceWidget extends StatelessWidget {
                               ).textBodyExtraLarge,
                             ),
 
-                            SizedBox(width: Dimen.horizontalMarginWidth),
+                            SizedBox(width: Dimen.horizontalMarginWidth(context)),
 
                             CustomText(
                               extraItemBalance ?? "$extraItemCurrency 0.00",

@@ -9,5 +9,6 @@ export 'offline_qrcode.dart';
 export 'offline_wallet_item.dart';
 export 'responsive_widget.dart';
 export 'snack_bar.dart';
+export 'svg.dart';
 export 'toast.dart';
 export 'transaction_item.dart';

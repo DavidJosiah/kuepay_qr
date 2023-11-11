@@ -1,8 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:kuepay_qr/controllers/controllers.dart';
@@ -48,7 +49,7 @@ class _HomeState extends State<Home> {
           controller.backPresses.value = 1;
           controller.lastBackPress.value = DateTime.now();
 
-          Snack.show(message: "Press back again to exit", type: SnackBarType.warning);
+          Snack.show(context, message: "Press back again to exit", type: SnackBarType.warning);
 
           return Future(() => false);
         }
@@ -58,7 +59,7 @@ class _HomeState extends State<Home> {
           color: CustomColors.dynamicColor(
               colorScheme: ColorThemeScheme.background
           ),
-          padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 3),
+          padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 3),
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -70,15 +71,15 @@ class _HomeState extends State<Home> {
                       children: [
 
                         Expanded(
-                          child: SvgPicture.asset(
+                          child: SVG(
                               'assets/images/offline.svg',
-                              height: Dimen.width,
-                              width: Dimen.width,
+                              height: Dimen.width(context),
+                              width: Dimen.width(context),
                               semanticsLabel: "Offline"
                           ),
                         ),
 
-                        SizedBox(height: Dimen.height * 0.1),
+                        SizedBox(height: Dimen.height(context) * 0.1),
 
                       ],
                     ),
@@ -86,7 +87,7 @@ class _HomeState extends State<Home> {
 
                   Container(
                     height: 42,
-                    width: Dimen.width * 0.9,
+                    width: Dimen.width(context) * 0.9,
                     decoration: BoxDecoration(
                       color: CustomColors.dynamicColor(colorScheme: ColorThemeScheme.background),
                       borderRadius: const BorderRadius.all(
@@ -95,7 +96,7 @@ class _HomeState extends State<Home> {
                     ),
                     child: MaterialButton(
                       height: 42,
-                      minWidth:  Dimen.width * 0.9,
+                      minWidth:  Dimen.width(context) * 0.9,
                       padding: EdgeInsets.zero,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(
@@ -112,7 +113,7 @@ class _HomeState extends State<Home> {
                           controller.data = data;
                           controller.history();
                         } else {
-                          Snack.show(message: "Could not get user data", type: SnackBarType.error);
+                          Snack.show(context, message: "Could not get user data", type: SnackBarType.error);
                         }
                       },
                       child: Center(
@@ -138,7 +139,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
 
-                  SizedBox(height: Dimen.verticalMarginHeight),
+                  SizedBox(height: Dimen.verticalMarginHeight(context)),
 
                 ],
               ),
@@ -149,10 +150,10 @@ class _HomeState extends State<Home> {
                   const Expanded(flex: 1, child: SizedBox()),
 
                   Container(
-                    width: Dimen.width,
+                    width: Dimen.width(context),
                     padding: EdgeInsets.symmetric(
-                        vertical: Dimen.verticalMarginHeight,
-                        horizontal: Dimen.horizontalMarginWidth * 2
+                        vertical: Dimen.verticalMarginHeight(context),
+                        horizontal: Dimen.horizontalMarginWidth(context) * 2
                     ),
                     decoration: BoxDecoration(
                         color: CustomColors.primary,
@@ -170,8 +171,8 @@ class _HomeState extends State<Home> {
                                   color: CustomColors.primary[2],
                                   borderRadius: BorderRadius.circular(18)
                               ),
-                              child: Center(
-                                child: SvgPicture.asset(
+                              child: const Center(
+                                child: SVG(
                                     'assets/icons/idea.svg',
                                     height: 24,
                                     width: 24,
@@ -181,7 +182,7 @@ class _HomeState extends State<Home> {
                               )
                           ),
 
-                          SizedBox(width: Dimen.horizontalMarginWidth * 2),
+                          SizedBox(width: Dimen.horizontalMarginWidth(context) * 2),
 
                           Expanded(
                             child: CustomText(
@@ -218,7 +219,7 @@ class _HomeState extends State<Home> {
                               controller.data = data;
                               controller.offlineSend();
                             } else {
-                              Snack.show(message: "Could not get user data", type: SnackBarType.error);
+                              Snack.show(context, message: "Could not get user data", type: SnackBarType.error);
                             }
                           },
                           title: "Offline Send",
@@ -242,7 +243,7 @@ class _HomeState extends State<Home> {
                               controller.data = data;
                               controller.offlineReceive();
                             } else {
-                              Snack.show(message: "Could not get user data", type: SnackBarType.error);
+                              Snack.show(context, message: "Could not get user data", type: SnackBarType.error);
                             }
                           },
                           title: "Offline Receive",
@@ -254,30 +255,30 @@ class _HomeState extends State<Home> {
                     ],
                   ),
 
-                  SizedBox(height: Dimen.verticalMarginHeight * 1),
+                  SizedBox(height: Dimen.verticalMarginHeight(context) * 1),
 
                   const PendingWalletItem(),
 
-                  SizedBox(height: Dimen.verticalMarginHeight * 1.5),
+                  SizedBox(height: Dimen.verticalMarginHeight(context) * 1.5),
 
                   CustomButton(
                     text: "Reconnect to App",
                     onPressed: () {
                       if(controller.isOffline.value) {
-                        Snack.show(message: "Could not connect to the internet", type: SnackBarType.error);
+                        Snack.show(context, message: "Could not connect to the internet", type: SnackBarType.error);
                       } else {
                         controller.hideScreen();
-                        Utils.completeOfflineTransactions();
+                        Utils.completeOfflineTransactions(context);
                       }
                     },
                     margin: EdgeInsets.zero,
                   ),
 
-                  SizedBox(height: Dimen.verticalMarginHeight),
+                  SizedBox(height: Dimen.verticalMarginHeight(context)),
 
                   const SizedBox(height: 42),
 
-                  SizedBox(height: Dimen.verticalMarginHeight),
+                  SizedBox(height: Dimen.verticalMarginHeight(context)),
 
                 ],
               )
@@ -317,8 +318,8 @@ class _HomeState extends State<Home> {
                   )
               ),
               padding: EdgeInsets.symmetric(
-                  horizontal: Dimen.horizontalMarginWidth * 2.25,
-                  vertical: Dimen.verticalMarginHeight
+                  horizontal: Dimen.horizontalMarginWidth(context) * 2.25,
+                  vertical: Dimen.verticalMarginHeight(context)
               ),
               color: color[3]!,
               onPressed: onPressed,
@@ -328,7 +329,7 @@ class _HomeState extends State<Home> {
 
                   SizedBox(height: size * 0.065),
 
-                  SvgPicture.asset(
+                  SVG(
                     icon,
                     height: size * 0.28,
                     width: size * 0.28,
@@ -410,7 +411,7 @@ class _PendingWalletItemState extends State<PendingWalletItem> {
               final maxHeight = constraints.maxHeight;
               final maxWidth = constraints.maxWidth;
               return Container(
-                width: Dimen.width,
+                width: Dimen.width(context),
                 height: 100,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -421,7 +422,10 @@ class _PendingWalletItemState extends State<PendingWalletItem> {
                     ),
                     image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage(wallet.background)
+                        image: AssetImage(
+                            wallet.background,
+                            package: 'kuepay_qr'
+                        )
                     ),
                     borderRadius: const BorderRadius.all(
                         Radius.circular(24)
@@ -468,7 +472,7 @@ class _PendingWalletItemState extends State<PendingWalletItem> {
 
                                   const Expanded(child: SizedBox()),
 
-                                  SizedBox(width: Dimen.horizontalMarginWidth)
+                                  SizedBox(width: Dimen.horizontalMarginWidth(context))
                                 ],
                               ),
                             ),
@@ -527,7 +531,7 @@ class _PendingWalletItemState extends State<PendingWalletItem> {
                           children: [
 
 
-                            SvgPicture.asset(
+                            SVG(
                                 'assets/icons/notification_info.svg',
                                 height: 16,
                                 width: 16,
@@ -535,7 +539,7 @@ class _PendingWalletItemState extends State<PendingWalletItem> {
                                 semanticsLabel: "Info"
                             ),
 
-                            SizedBox(width: Dimen.horizontalMarginWidth),
+                            SizedBox(width: Dimen.horizontalMarginWidth(context)),
 
                             Expanded(
                               child: CustomText(

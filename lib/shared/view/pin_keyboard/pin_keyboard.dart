@@ -1,9 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import 'package:kuepay_qr/logic/logic.dart';
 import 'package:kuepay_qr/config/config.dart';
 import 'package:kuepay_qr/services/services.dart';
 import 'package:kuepay_qr/shared/shared.dart';
@@ -44,8 +41,6 @@ class PinKeyboard extends StatelessWidget {
 
     final controller = Get.find<PinKeyboardController>();
     controller.pin = "";
-
-    isFingerprintActivated(controller);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -102,7 +97,7 @@ class PinKeyboard extends StatelessWidget {
             ),
 
             Container(
-              width: Dimen.width,
+              width: Dimen.width(context),
               height: 260,
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
@@ -120,7 +115,7 @@ class PinKeyboard extends StatelessWidget {
             const Expanded(child: SizedBox()),
 
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 1.5),
+              padding: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 1.5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,7 +127,7 @@ class PinKeyboard extends StatelessWidget {
                         height: 60,
                         isOutlined: true,
                         text: cancelText ?? "Cancel",
-                        margin: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 1.5),
+                        margin: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 1.5),
                         onPressed: () {
                           if(onCancelClick == null){
                             Get.back();
@@ -146,17 +141,14 @@ class PinKeyboard extends StatelessWidget {
                   Expanded(
                     child: CustomButton(
                       height: 60,
-                      margin: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth * 1.5),
+                      margin: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 1.5),
                       text: buttonText ?? "Ok",
                       onPressed: () async {
                         if(controller.pin.length == maxLength) {
                           if(isForAuthorization){
                             bool isPinCorrect = false;
                             if(offlinePin != null){
-                              Utils.startSheetLoading();
-                              final inputtedPin = await Utils.encryptVariableHMAC(controller.pin);
-                              Utils.stopSheetLoading();
-                              isPinCorrect = inputtedPin == offlinePin;
+                              isPinCorrect = controller.pin == offlinePin;
                             } else {
                               isPinCorrect = await _validatePin(controller, controller.pin);
                             }
@@ -177,7 +169,7 @@ class PinKeyboard extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: Dimen.verticalMarginHeight * 2),
+            SizedBox(height: Dimen.verticalMarginHeight(context) * 2),
           ],
         ),
       ),
@@ -245,46 +237,9 @@ class PinKeyboard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          GetX<PinKeyboardController>(
-              builder: (controller) {
-                return buildNumberButton(
-                    icon: controller.useFingerprint.value && isForAuthorization
-                        ? Container(
-                      height: 60,
-                      width: 60,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: CustomColors.primaryGradient,
-                      ),
-                      child: Center(
-                        child: SvgPicture.asset(
-                            'assets/images/fingerprint.svg',
-                            height: 30,
-                            width: 30,
-                            semanticsLabel: "Fingerprint"
-                        ),
-                      ),
-                    ) : const SizedBox(),
-                    onPressed: () async {
-                      if(controller.useFingerprint.value && isForAuthorization) {
-                        bool didAuthenticate;
-                        try {
-                          didAuthenticate = await LocalAuthApi.authenticate();
-                        } on Exception catch (e) {
-                          if (kDebugMode) {
-                            print(e.toString());
-                          }
-                          didAuthenticate = false;
-                        }
-
-                        if (!didAuthenticate) return;
-
-                        onButtonClick();
-                      }
-
-                    }
-                );
-              }
+          const SizedBox(
+            height: 60,
+            width: 60,
           ),
 
           buildNumberButton(
@@ -300,7 +255,7 @@ class PinKeyboard extends StatelessWidget {
           ),
 
           buildNumberButton(
-              icon: SvgPicture.asset(
+              icon: SVG(
                   key: const Key('backspace'),
                   'assets/icons/backspace.svg',
                   height: 24,
@@ -319,10 +274,6 @@ class PinKeyboard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  void isFingerprintActivated(PinKeyboardController controller) async {
-    controller.useFingerprint.value = await Utils.isFingerprintActivated();
   }
 
   Future<bool> _validatePin(PinKeyboardController controller, String pin) async {
@@ -381,7 +332,7 @@ class PinCodeField extends StatelessWidget {
       duration: const Duration(milliseconds: 50),
       child: pin.length > pinCodeFieldIndex
           ? Center(
-        child: SvgPicture.asset(
+        child: SVG(
             'assets/images/asterisk.svg',
             height: 12,
             width: 12,
@@ -404,8 +355,6 @@ class PinKeyboardController extends GetxController {
   RxString passwordError = "".obs;
 
   RxBool isPasswordVisible = false.obs;
-
-  RxBool useFingerprint = false.obs;
 
   String get pin => _pin.value;
   String get pinError => _pinError.value;
