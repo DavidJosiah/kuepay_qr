@@ -19,7 +19,7 @@ class OfflineScreen extends StatelessWidget {
     CustomText.referenceSize = Constants.extraSmallScreenSize;
 
     return MaterialApp(
-        debugShowCheckedModeBanner: true,
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: "DMSans",
           package: "kuepay_qr",

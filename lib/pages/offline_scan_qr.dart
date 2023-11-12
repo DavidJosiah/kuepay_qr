@@ -32,14 +32,13 @@ class _OfflineScanQRState extends State<OfflineScanQR> {
 
     return WillPopScope(
       onWillPop: () async {
-
-        final controller = Get.find<KuepayOfflineController>();
+        final controller = Get.find<OfflineDetailsController>();
+        final kuepayController = Get.find<KuepayOfflineController>();
         if(controller.currentTab.value == 0){
-          controller.home();
+          kuepayController.home();
         } else if(controller.currentTab.value == 2) {
           controller.changeTab(controller.currentTab.value - 1);
         }
-
         return false;
       },
       child: Scaffold(
@@ -47,9 +46,10 @@ class _OfflineScanQRState extends State<OfflineScanQR> {
             centerTitle: true,
             leading: IconButton(
               onPressed: () {
-                final controller = Get.find<KuepayOfflineController>();
+                final controller = Get.find<OfflineDetailsController>();
+                final kuepayController = Get.find<KuepayOfflineController>();
                 if(controller.currentTab.value == 0){
-                  controller.home();
+                  kuepayController.home();
                 } else if(controller.currentTab.value == 2) {
                   controller.changeTab(controller.currentTab.value - 1);
                 }
