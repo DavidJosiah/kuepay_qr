@@ -51,7 +51,7 @@ class _DefaultState extends State<_Default> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.isOffline.listen((isOffline){
-        if(!isOffline && controller.isShowingScreen) {
+        if(!isOffline && controller.isShowingScreen && controller.currentTab.value == 0) {
           controller.hideScreen();
         }
       });
