@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'package:kuepay_qr/config/config.dart';
 
@@ -19,7 +18,7 @@ void showConfirmationDialog ({
   }){
 
   onDismiss ??= (){
-    Get.back();
+    Navigator.pop(parentContext);
   };
 
   showDialog(context: parentContext, builder: (BuildContext context) {

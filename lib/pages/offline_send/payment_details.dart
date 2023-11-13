@@ -26,7 +26,7 @@ class PaymentDetails extends StatelessWidget {
     final String descriptionText = controller.decryptedData[Constants.description] ?? "";
 
     final String walletAddress = controller.walletAddress;
-    final int walletBalance = controller.walletBalance;
+    final int walletBalance = controller.walletBalance - controller.pendingBalance;
     final int availableLimit = controller.availableLimit;
 
     amount.text = value;
@@ -185,7 +185,7 @@ class PaymentDetails extends StatelessWidget {
 
     final double amountValue = double.parse(controller.decryptedData[Constants.value] ?? 0);
 
-    if (amountValue > controller.walletBalance) {
+    if (amountValue > (controller.walletBalance - controller.pendingBalance)) {
       controller.amountError.value = "Insufficient Balance";
       return false;
     } else if (amountValue > controller.availableLimit) {
@@ -209,7 +209,7 @@ class PaymentDetails extends StatelessWidget {
               top: Radius.circular(20),
             )
         ),
-        builder: (context) => AuthorizeOfflineSend(pin: controller.encryptedPin),
+        builder: (context) => AuthorizeOfflineSend(pin: controller.pin),
       );
     }
   }

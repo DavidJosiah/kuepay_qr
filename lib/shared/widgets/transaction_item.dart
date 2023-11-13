@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'package:kuepay_qr/logic/logic.dart';
 import 'package:kuepay_qr/config/config.dart';
@@ -36,9 +35,14 @@ class TransactionItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 3.0),
       child: MaterialButton(
         onPressed: () {
-          Get.to(() => TransactionDetails(
-            transaction: transaction,
-          ), transition: Transition.fadeIn);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TransactionDetails(
+                    transaction: transaction,
+                  )
+              )
+          );
         },
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(

@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'package:encrypt/encrypt.dart' as encrypt;
 
@@ -248,7 +247,7 @@ class QRTransaction {
 
     controller.decryptedData = requiredData;
 
-    Get.back();
+    Navigator.pop(context);
 
     controller.completedTransaction.value = transaction;
 

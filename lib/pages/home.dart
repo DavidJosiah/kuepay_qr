@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -566,28 +565,14 @@ class _PendingWalletItemState extends State<PendingWalletItem> {
   }
 
   void getBalance() async {
-    double balance = 0.0;
-
-    final stringTransactions = await OfflineTransactions.transactions;
-
-    for (String encrypted in stringTransactions) {
-      final decrypted = await Utils.decryptVariable(encrypted);
-      final Map<String, dynamic> data = jsonDecode(decrypted) as Map<String, dynamic>;
-
-      final value = num.parse(data[Constants.value] ?? "0").ceil();
-
-      String amount = (value).toString();
-      String receiverID = data[Constants.receiverID];
-      bool isInflow = receiverID == Get.find<OfflineDetailsController>().userId;
-
-      if(isInflow) balance = balance + num.parse(amount).toDouble();
-    }
-
+    final balance = await OfflineWallet.pendingBalance;
     final available = await OfflineWallet.balance;
 
+    Get.find<OfflineDetailsController>().pendingBalance = num.parse(balance).toInt();
+
     setState(() {
-      wallet.balance = balance.floor().toString();
-      availableBalance = available;
+      wallet.balance = balance;
+      availableBalance = (double.parse(available) - double.parse(balance)).toString();
     });
   }
 }

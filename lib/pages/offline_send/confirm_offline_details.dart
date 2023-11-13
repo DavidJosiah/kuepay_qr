@@ -35,7 +35,7 @@ class ConfirmOfflineDetails extends StatelessWidget {
             centerTitle: true,
             actions: [
               IconButton(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.pop(context),
                 icon: SVG(
                     'assets/icons/cancel.svg',
                     height: 24,

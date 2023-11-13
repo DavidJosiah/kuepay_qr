@@ -1,6 +1,10 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:kuepay_qr/config/config.dart';
+import 'package:kuepay_qr/controllers/controllers.dart';
+
+import 'offline_transactions.dart';
 
 class OfflineWallet {
 
@@ -76,5 +80,26 @@ class OfflineWallet {
   static Future<void> debit(double value) async {
     final currentBalance = await balance;
     await setBalance((num.parse(currentBalance).toDouble() - value).toString());
+  }
+
+  static Future<String> get pendingBalance async {
+    double balance = 0.0;
+
+    final stringTransactions = await OfflineTransactions.transactions;
+
+    for (String encrypted in stringTransactions) {
+      final decrypted = await Utils.decryptVariable(encrypted);
+      final Map<String, dynamic> data = jsonDecode(decrypted) as Map<String, dynamic>;
+
+      final value = num.parse(data[Constants.value] ?? "0").ceil();
+
+      String amount = (value).toString();
+      String receiverID = data[Constants.receiverID];
+      bool isInflow = receiverID == Get.find<OfflineDetailsController>().userId;
+
+      if(isInflow) balance = balance + num.parse(amount).toDouble();
+    }
+
+    return balance.floor().toString();
   }
 }

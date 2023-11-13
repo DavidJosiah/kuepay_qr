@@ -3,7 +3,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:get/get.dart';
 
 import 'package:kuepay_qr/config/config.dart';
 import 'package:kuepay_qr/shared/shared.dart';
@@ -101,7 +100,7 @@ class QRDialog {
                     CustomButton(
                       height: Dimen.height(context) * 0.06,
                       onPressed: () {
-                        Get.back();
+                        Navigator.pop(context);
                       },
                       isOutlined: true,
                       text: "Cancel",
@@ -130,7 +129,7 @@ class QRDialog {
       Utils.stopLoading();
 
       if(result) {
-        Get.back();
+        Navigator.pop(context);
         Snack.show(context, message: "QR saved successfully", type: SnackBarType.info);
       }
     } catch (e) {

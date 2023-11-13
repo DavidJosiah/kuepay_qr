@@ -35,7 +35,7 @@ class TransactionDetails extends StatelessWidget {
         centerTitle: false,
         leading: IconButton(
           onPressed: () {
-            Get.back();
+            Navigator.pop(context);
           },
           icon: SVG(
               'assets/icons/back_arrow.svg',
@@ -371,7 +371,7 @@ class TransactionDetails extends StatelessWidget {
                     if(isOfflineTransaction){
                       Get.find<KuepayOfflineController>().home();
                     } else {
-                      Get.back();
+                      Navigator.pop(context);
                     }
                   },
                   margin: EdgeInsets.only(left: Dimen.horizontalMarginWidth(context) * 3),
@@ -385,9 +385,14 @@ class TransactionDetails extends StatelessWidget {
                   width: isComplete ? Dimen.width(context) * 0.42 : null,
                   text: "Show Receipt",
                   onPressed: () {
-                    Get.to(() => TransactionReceipt(
-                        transaction: transaction,
-                    ), transition: Transition.fadeIn);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TransactionReceipt(
+                              transaction: transaction,
+                            )
+                        )
+                    );
                   },
                   margin: EdgeInsets.only(
                     right: isComplete ? Dimen.horizontalMarginWidth(context) * 3 : 0

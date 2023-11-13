@@ -130,7 +130,7 @@ class PinKeyboard extends StatelessWidget {
                         margin: EdgeInsets.symmetric(horizontal: Dimen.horizontalMarginWidth(context) * 1.5),
                         onPressed: () {
                           if(onCancelClick == null){
-                            Get.back();
+                            Navigator.pop(context);
                           } else {
                             onCancelClick!();
                           }

@@ -58,7 +58,7 @@ class _TransactionReceiptState extends State<TransactionReceipt> {
                             width: 24,
                             child: IconButton(
                               padding: EdgeInsets.zero,
-                              onPressed: () => Get.back(),
+                              onPressed: () => Navigator.pop(context),
                               icon: const SVG(
                                   'assets/icons/cancel.svg',
                                   height: 24,

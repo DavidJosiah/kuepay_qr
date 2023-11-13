@@ -48,7 +48,13 @@ class OfflineDetailsController extends GetxController{
   String get walletAddress => data["walletAddress"];
   int get walletBalance => num.parse(data["walletBalance"].toString()).toInt();
   int get availableLimit => (data["availableLimit"] as num).toInt();
-  String get encryptedPin => data["pin"];
+  String get pin => data["pin"];
+
+  final RxInt _pendingBalance = 0.obs;
+
+  int get pendingBalance => _pendingBalance.value;
+
+  set pendingBalance (int value) => _pendingBalance.value = value;
 
   Rx<Transaction> completedTransaction = Transaction.empty().obs;
 

@@ -191,8 +191,8 @@ class _Body extends StatelessWidget {
         confirmationText: "Confirmed",
         subtitle: "Please confirm that the receiver has scanned this code before you continue",
         onConfirm: () {
-          controller.changeTab(3);
-          Get.back();
+          Navigator.pop(context);
+          controller.changeTab(controller.currentTab.value + 1);
         }
     );
   }
