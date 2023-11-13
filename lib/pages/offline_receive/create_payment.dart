@@ -106,9 +106,7 @@ class CreatePayment extends StatelessWidget {
                                   width: 40,
                                   child: TextButton(
                                     onPressed: () {
-                                      final int limit = controller.availableLimit;
-                                      final int balance = controller.walletBalance;
-                                      amount.text = (limit > balance ? balance : limit).toString();
+                                      amount.text = controller.availableLimit.toString();
                                       controller.amount.value = amount.text;
                                     },
                                     style: TextButton.styleFrom(
