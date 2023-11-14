@@ -190,7 +190,7 @@ class _Body extends StatelessWidget {
         title: "Finish Transaction",
         confirmationText: "Confirmed",
         subtitle: "Please confirm that the receiver has scanned this code before you continue",
-        onConfirm: () {
+        onConfirm: (context) {
           Navigator.pop(context);
           controller.changeTab(controller.currentTab.value + 1);
         }

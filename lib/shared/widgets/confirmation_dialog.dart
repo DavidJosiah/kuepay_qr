@@ -14,12 +14,8 @@ void showConfirmationDialog ({
   String dismissText = "Cancel",
   void Function()? onDismiss,
   String confirmationText = "Confirm",
-  required void Function() onConfirm,
+  required void Function(BuildContext context) onConfirm,
   }){
-
-  onDismiss ??= (){
-    Navigator.pop(parentContext);
-  };
 
   showDialog(context: parentContext, builder: (BuildContext context) {
     return AlertDialog(
@@ -106,7 +102,13 @@ void showConfirmationDialog ({
                     child: CustomButton(
                       height: 48,
                       color: CustomColors.primary[3],
-                      onPressed: onDismiss!,
+                      onPressed: () {
+                        if(onDismiss == null) {
+                          Navigator.pop(context);
+                        } else {
+                          onDismiss();
+                        }
+                      },
                       text: dismissText,
                       isOutlined: true,
                     ),
@@ -122,7 +124,7 @@ void showConfirmationDialog ({
                   flex: 10,
                   child: CustomButton(
                     height: 48,
-                    onPressed: onConfirm,
+                    onPressed: () => onConfirm(context),
                     text: confirmationText,
                   ),
                 ),
