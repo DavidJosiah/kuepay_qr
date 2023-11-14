@@ -7,7 +7,6 @@ import 'package:kuepay_qr/config/config.dart';
 import 'package:kuepay_qr/logic/logic.dart';
 
 import 'package:kuepay_qr/shared/shared.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'authentication.dart';
 

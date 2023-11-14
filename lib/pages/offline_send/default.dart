@@ -13,7 +13,8 @@ import 'offline_send_complete.dart';
 
 class OfflineSend extends StatefulWidget {
   OfflineSend({Key? key}) : super(key: key){
-    Get.put (OfflineDetailsController());
+    Get.delete<OfflineDetailsController>();
+    Get.put(OfflineDetailsController());
   }
 
   @override
@@ -26,7 +27,6 @@ class _OfflineSendState extends State<OfflineSend> {
   void initState() {
     final controller = Get.find<OfflineDetailsController>();
 
-    controller.changeTab(0);
     controller.data.value = Get.find<KuepayOfflineController>().data;
     controller.decryptedData = {};
 

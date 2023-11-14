@@ -95,7 +95,7 @@ class OfflineWallet {
 
       String amount = (value).toString();
       String receiverID = data[Constants.receiverID];
-      bool isInflow = receiverID == Get.find<OfflineDetailsController>().userId;
+      bool isInflow = receiverID == Get.find<KuepayOfflineController>().data["userId"];
 
       if(isInflow) balance = balance + num.parse(amount).toDouble();
     }

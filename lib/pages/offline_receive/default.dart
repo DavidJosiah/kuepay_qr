@@ -13,6 +13,7 @@ import 'offline_receive_complete.dart';
 
 class OfflineReceive extends StatefulWidget {
   OfflineReceive({Key? key}) : super(key: key){
+    Get.delete<OfflineDetailsController>();
     Get.put (OfflineDetailsController());
   }
 
@@ -26,7 +27,6 @@ class _OfflineReceiveState extends State<OfflineReceive> {
   void initState() {
     final controller = Get.find<OfflineDetailsController>();
 
-    controller.changeTab(0);
     controller.data.value = Get.find<KuepayOfflineController>().data;
     controller.decryptedData = {};
 

@@ -64,7 +64,7 @@ class _DefaultState extends State<_Default> {
 
   final List<Widget> screens = [
     const Home(),
-    OfflineHistory(),
+    const OfflineHistory(),
     OfflineSend(),
     OfflineReceive(),
   ];

@@ -9,9 +9,7 @@ import 'package:kuepay_qr/controllers/controllers.dart';
 import 'package:kuepay_qr/shared/shared.dart';
 
 class OfflineHistory extends StatefulWidget {
-  OfflineHistory({Key? key,}) : super(key: key){
-    Get.put (OfflineDetailsController());
-  }
+  const OfflineHistory({Key? key,}) : super(key: key);
 
   @override
   OfflineHistoryState createState() => OfflineHistoryState();
@@ -26,8 +24,6 @@ class OfflineHistoryState extends State<OfflineHistory> with TickerProviderState
 
   @override
   void initState() {
-    Get.find<OfflineDetailsController>().data.value = Get.find<KuepayOfflineController>().data;
-
     tabController = TabController(length: 3, vsync: this);
     fetchItems();
     super.initState();
@@ -169,7 +165,7 @@ class OfflineHistoryState extends State<OfflineHistory> with TickerProviderState
       String receiverID = data[Constants.receiverID];
       String receiverName = data[Constants.receiverName] ?? "";
       String receiverWalletAddress = data[Constants.receiverWalletAddress];
-      bool isInflow = receiverID == Get.find<OfflineDetailsController>().userId;
+      bool isInflow = receiverID == Get.find<KuepayOfflineController>().data["userId"];
 
       final transaction = Transaction(
         id: "PROCESSING",
