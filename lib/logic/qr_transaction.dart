@@ -262,48 +262,58 @@ class QRTransaction {
   }
 
   static Future<List> extract (String time, String data) async {
-    final fields = time.split('');
+    try {
+      final fields = time.split('');
 
-    List<String> result = [];
+      List<String> result = [];
 
-    int positionSum = 0;
+      int positionSum = 0;
 
-    String key = "";
+      String key = "";
 
-    for(int i = 0; i < 24; i++){
-      final position = int.parse(fields[i % fields.length]);
+      for(int i = 0; i < 24; i++){
+        final position = int.parse(fields[i % fields.length]);
 
-      result.add(data.substring(positionSum, position + positionSum));
+        result.add(data.substring(positionSum, position + positionSum));
 
-      if(positionSum != 0){
-        key = key + data[positionSum - 1];
+        if(positionSum != 0){
+          key = key + data[positionSum - 1];
+        }
+
+        positionSum = positionSum + position + 1;
       }
 
-      positionSum = positionSum + position + 1;
-    }
+      final last = data.split(result.last).last;
 
-    final last = data.split(result.last).last;
+      key = key + last[0];
 
-    key = key + last[0];
+      result.add(last.substring(1));
 
-    result.add(last.substring(1));
+      String encryptedString = "";
 
-    String encryptedString = "";
+      for(String s in result){
+        encryptedString = encryptedString + s;
+      }
 
-    for(String s in result){
-      encryptedString = encryptedString + s;
-    }
+      String decrypted = "";
 
-    String decrypted = "";
-
-    try {
-      Utils.startLoading();
-      decrypted = await Utils.decryptVariableWithKey(key, encryptedString);
-      Utils.stopLoading();
-      return [
-        true,
-        decrypted,
-      ];
+      try {
+        Utils.startLoading();
+        decrypted = await Utils.decryptVariableWithKey(key, encryptedString);
+        Utils.stopLoading();
+        return [
+          true,
+          decrypted,
+        ];
+      } catch (e) {
+        Utils.stopLoading();
+        if(kDebugMode){
+          print(e.toString());
+        }
+        return [
+          false,
+        ];
+      }
     } catch (e) {
       Utils.stopLoading();
       if(kDebugMode){
@@ -313,6 +323,8 @@ class QRTransaction {
         false,
       ];
     }
+
+
   }
 
   static String scrambleFields(String key, String data) {

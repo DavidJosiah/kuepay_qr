@@ -20,7 +20,7 @@ class CreatePayment extends StatelessWidget {
 
     const String currency = Constants.nairaSign;
     final String walletAddress = controller.walletAddress;
-    final int walletBalance = controller.walletBalance;
+    final int walletBalance = controller.walletBalance - controller.pendingBalance;
     final int availableLimit = controller.availableLimit;
 
     return WillPopScope(
