@@ -137,7 +137,7 @@ class _KuepayOfflineState extends State<KuepayOffline> {
 
         GetX<KuepayOfflineController>(
           builder: (controller) {
-            if(controller.isShowingScreen && controller.data.isNotEmpty){
+            if(controller.isShowingScreen && controller.isDataComplete){
               return const OfflineScreen();
             } else {
               return const SizedBox();

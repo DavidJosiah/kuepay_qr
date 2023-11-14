@@ -40,7 +40,7 @@ class Auth {
       "password": password,
     });
 
-    final data = await postRequest(url, body, isSignUp: true);
+    final data = await postRequest(url, body, isSignUp: true, verifyToken: false);
 
     final result = data["success"] ?? false;
 
@@ -64,7 +64,7 @@ class Auth {
       "password": password,
     });
 
-    final result = await postRequest(url, body, isSignIn: true);
+    final result = await postRequest(url, body, isSignIn: true, verifyToken: false);
 
     if (result.isNotEmpty) {
       final userID = result['data']['userId'];
@@ -83,9 +83,31 @@ class Auth {
       OfflineWallet.setId(walletId);
 
       UserData.setAccessToken(result['token']['accesstoken']);
+
+      final prefs = Prefs();
+
+      await prefs.setString('previousSignIn', DateTime.now().millisecondsSinceEpoch.toString());
+      await prefs.setString('tokenExpiry', result['token']['tokenExpire'].toString().split(' ')[0]);
+      await prefs.setString('lastVerification', DateTime.now().millisecondsSinceEpoch.toString());
+
     }
 
     return result.isNotEmpty;
+  }
+
+  Future<Map> accessSignIn() async {
+    String path = "/accessSignIn";
+    String url = '$base$path';
+
+    String token = await UserData.accessToken;
+
+    final body = json.encode({
+      "token": token,
+    });
+
+    final result = await postRequest(url, body, isSignIn: true, verifyToken: false);
+
+    return result;
   }
 
   Future<bool> verifyPin({required String pin}) async {

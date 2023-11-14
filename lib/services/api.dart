@@ -3,9 +3,13 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:kuepay_qr/config/config.dart';
 import 'package:kuepay_qr/logic/logic.dart';
 
 import 'package:kuepay_qr/shared/shared.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'authentication.dart';
 
 class Api {
 
@@ -44,11 +48,16 @@ class Api {
   Future<Map> postRequest(String url, String body, {
     bool isSignIn = false,
     bool isSignUp = false,
-    bool returnData = true
+    bool returnData = true,
+    bool verifyToken = true,
   }) async {
     Map data = {};
 
     try {
+      final isVerified = verifyToken ? await verifyAccessToken() : true;
+
+      if(!isVerified) return data;
+
       final Uri uri = Uri.parse(url);
 
       final header = await baseHeader;
@@ -98,11 +107,15 @@ class Api {
     return data;
   }
 
-
   Future<Map> getRequest(String url) async {
     Map data = {};
 
     try {
+
+      final isVerified = await verifyAccessToken();
+
+      if(!isVerified) return data;
+
       final Uri uri = Uri.parse(url);
 
       final header = await baseHeader;
@@ -140,6 +153,11 @@ class Api {
     List<dynamic> data = [];
 
     try {
+
+      final isVerified = await verifyAccessToken();
+
+      if(!isVerified) return data;
+
       final Uri uri = Uri.https(base, path, query);
 
       final header = await baseHeader;
@@ -169,5 +187,39 @@ class Api {
     }
 
     return data;
+  }
+
+  static Future<bool> verifyAccessToken() async {
+
+    final prefs = Prefs();
+
+    final previousSignIn = await prefs.getString('previousSignIn') ?? "0";
+    final tokenExpiry = await prefs.getString('tokenExpiry') ?? '2';
+
+    final expiration = Duration(minutes: int.parse(tokenExpiry));
+    final tokenInitializationTime = DateTime.fromMillisecondsSinceEpoch(int.parse(previousSignIn));
+    final hasExpired = DateTime.now().difference(tokenInitializationTime) > expiration;
+
+    if(hasExpired) {
+      final result = await Auth().accessSignIn();
+
+      if (result.isNotEmpty) {
+
+        UserData.setUserId(result['data']['userId']);
+        UserData.setAccessToken(result['token']['accesstoken']);
+
+        final prefs = Prefs();
+
+        await prefs.setString('previousSignIn', DateTime.now().millisecondsSinceEpoch.toString());
+        await prefs.setString('tokenExpiry', result['token']['tokenExpire'].toString().split(' ')[0]);
+        await prefs.setString('lastVerification', DateTime.now().millisecondsSinceEpoch.toString());
+
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
   }
 }
