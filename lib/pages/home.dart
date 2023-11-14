@@ -568,7 +568,7 @@ class _PendingWalletItemState extends State<PendingWalletItem> {
     final balance = await OfflineWallet.pendingBalance;
     final available = await OfflineWallet.balance;
 
-    Get.find<OfflineDetailsController>().pendingBalance = num.parse(balance).toInt();
+    Get.find<KuepayOfflineController>().pendingBalance = num.parse(balance).toInt();
 
     setState(() {
       wallet.balance = balance;

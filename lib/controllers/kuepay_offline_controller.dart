@@ -21,6 +21,13 @@ class KuepayOfflineController extends GetxController {
   bool get isShowingScreen => _isShowingScreen.value;
 
 
+  final RxInt _pendingBalance = 0.obs;
+
+  int get pendingBalance => _pendingBalance.value;
+
+  set pendingBalance (int value) => _pendingBalance.value = value;
+
+
   final RxBool _isLoading = false.obs;
 
   final RxBool _isSheetLoading = false.obs;

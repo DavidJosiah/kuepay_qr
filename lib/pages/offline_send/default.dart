@@ -27,6 +27,7 @@ class _OfflineSendState extends State<OfflineSend> {
   void initState() {
     final controller = Get.find<OfflineDetailsController>();
 
+    controller.pendingBalance = Get.find<KuepayOfflineController>().pendingBalance;
     controller.data.value = Get.find<KuepayOfflineController>().data;
     controller.decryptedData = {};
 
