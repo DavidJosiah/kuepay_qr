@@ -27,13 +27,9 @@ class KuepayOfflineController extends GetxController {
 
   final RxBool _isCompletingOffline = false.obs;
 
-  final RxBool _isDataComplete = false.obs;
-
   bool get isLoading => _isLoading.value;
 
   bool get isCompletingOffline => _isCompletingOffline.value;
-
-  bool get isDataComplete => _isDataComplete.value;
 
   void startLoading() => _isLoading.value = true;
 
@@ -46,8 +42,6 @@ class KuepayOfflineController extends GetxController {
   void startCompletingOffline() => _isCompletingOffline.value = true;
 
   void stopCompletingOffline() => _isCompletingOffline.value = false;
-
-  set isDataComplete(bool value) => _isDataComplete.value = value;
 
   final RxMap _data = {}.obs;
 

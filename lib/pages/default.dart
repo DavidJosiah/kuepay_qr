@@ -137,7 +137,7 @@ class _KuepayOfflineState extends State<KuepayOffline> {
 
         GetX<KuepayOfflineController>(
           builder: (controller) {
-            if(controller.isShowingScreen && controller.isDataComplete){
+            if(controller.isShowingScreen && controller.data.isNotEmpty){
               return const OfflineScreen();
             } else {
               return const SizedBox();
@@ -149,6 +149,8 @@ class _KuepayOfflineState extends State<KuepayOffline> {
   }
 
   static Future<void> _setData() async {
+    Get.find<KuepayOfflineController>().data = {};
+
     if (await UserData.isDataComplete()) {
       final Map<String, dynamic> userData = await UserData.details;
       final Map<String, String> walletData = await OfflineWallet.details;
