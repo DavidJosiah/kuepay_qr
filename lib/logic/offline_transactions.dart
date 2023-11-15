@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'package:kuepay_qr/shared/shared.dart';
 import 'package:kuepay_qr/config/config.dart';

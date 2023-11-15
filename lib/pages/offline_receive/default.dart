@@ -27,6 +27,7 @@ class _OfflineReceiveState extends State<OfflineReceive> {
   void initState() {
     final controller = Get.find<OfflineDetailsController>();
 
+    controller.changeTab(0);
     controller.pendingBalance = Get.find<KuepayOfflineController>().pendingBalance;
     controller.data.value = Get.find<KuepayOfflineController>().data;
     controller.decryptedData = {};
