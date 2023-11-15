@@ -3,12 +3,12 @@ import 'package:kuepay_qr/kuepay_qr.dart';
 
 void main() {
   runApp(const MyApp());
-  KuepayQRMethods().registerHeadlessTask(fetchHeadlessTask);
+  KuepayQRBackground().registerHeadlessTask(fetchHeadlessTask);
 }
 
 @pragma('vm:entry-point')
 void fetchHeadlessTask(HeadlessTask task) {
-  KuepayQRMethods().backgroundFetchHeadlessTask(task);
+  KuepayQRBackground().backgroundFetchHeadlessTask(task);
 }
 
 class MyApp extends StatefulWidget {
@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    KuepayQRMethods().initPlatformState();
+    KuepayQRBackground().initPlatformState();
   }
 
 

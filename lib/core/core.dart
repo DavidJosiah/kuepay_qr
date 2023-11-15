@@ -1,1 +1,3 @@
-export 'methods.dart';
+export 'authentication.dart';
+export 'background.dart';
+export 'wallet.dart';

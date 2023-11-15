@@ -73,16 +73,17 @@ class Auth {
       final walletAddress = result['data']['walletAddress'];
       final walletId = result['data']['walletId'];
 
-      UserData.setUserId(userID);
-      UserData.setName(name);
-      UserData.resetLimit();
+      await UserData.setUserId(userID);
+      await UserData.setName(name);
+      await UserData.resetLimit();
 
-      OfflineWallet.setAddress(walletAddress);
-      OfflineWallet.setBalance("0");
-      OfflineWallet.setCurrency(Constants.nairaSign);
-      OfflineWallet.setId(walletId);
+      await OfflineWallet.setAddress(walletAddress);
+      await OfflineWallet.setCurrency(Constants.nairaSign);
+      await OfflineWallet.setId(walletId);
 
-      UserData.setAccessToken(result['token']['accesstoken']);
+      await OfflineWallet.setBalance(await OfflineWallet.balance);
+
+      await UserData.setAccessToken(result['token']['accesstoken']);
 
       final prefs = Prefs();
 
@@ -95,7 +96,9 @@ class Auth {
     return result.isNotEmpty;
   }
 
-  Future<Map> accessSignIn() async {
+
+  Future<bool> accessSignIn() async {
+
     String path = "/accessSignIn";
     String url = '$base$path';
 
@@ -107,7 +110,18 @@ class Auth {
 
     final result = await postRequest(url, body, isSignIn: true, verifyToken: false);
 
-    return result;
+    if (result.isNotEmpty) {
+      await UserData.setUserId(result['data']['userId']);
+      await UserData.setAccessToken(result['token']['accesstoken']);
+
+      final prefs = Prefs();
+
+      await prefs.setString('previousSignIn', DateTime.now().millisecondsSinceEpoch.toString());
+      await prefs.setString('tokenExpiry', result['token']['tokenExpire'].toString().split(' ')[0]);
+      await prefs.setString('lastVerification', DateTime.now().millisecondsSinceEpoch.toString());
+    }
+
+    return result.isNotEmpty;
   }
 
   Future<bool> verifyPin({required String pin}) async {
@@ -115,10 +129,10 @@ class Auth {
     return userPin == pin;
   }
 
-  Future<void> setPin(String pin) async {
+  Future<bool> setPin(String pin) async {
     if(pin.length != 4){
       Toast.show(message: "Pin should be a 4-digit number", type: ToastType.error);
-      return;
+      return false;
     }
 
     try {
@@ -129,9 +143,9 @@ class Auth {
       }
 
       Toast.show(message: "Pin should be a 4-digit number", type: ToastType.error);
-      return;
+      return false;
     }
-
-    UserData.setPin(pin);
+    await UserData.setPin(pin);
+    return true;
   }
 }

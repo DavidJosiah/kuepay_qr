@@ -1,7 +1,7 @@
 import 'package:background_fetch/background_fetch.dart' as background;
 import 'package:kuepay_qr/config/config.dart';
 
-class KuepayQRMethods {
+class KuepayQRBackground {
 
   /// Register to receive BackgroundFetch events after app is terminated.
   /// Requires {stopOnTerminate: false, enableHeadless: true}
@@ -55,28 +55,8 @@ class KuepayQRMethods {
       background.BackgroundFetch.finish(taskId);
     });
   }
-
-  Future<void> fundWallet() async {
-    //TODO
-    //TODO OfflineWallet.credit
-  }
-
-  Future<void> getWalletDetails() async {
-    //TODO
-  }
-
-  Future<void> beginBalanceSync() async {
-    //TODO
-  }
-
-  Future<List<Map<String, dynamic>>> getTransactions() async {
-    //TODO
-    return [];
-  }
 }
 
 class HeadlessTask extends background.HeadlessTask {
   HeadlessTask(super.taskId, super.timeout);
 }
-
-

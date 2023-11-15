@@ -200,23 +200,7 @@ class Api {
     final hasExpired = DateTime.now().difference(tokenInitializationTime) > expiration;
 
     if(hasExpired) {
-      final result = await Auth().accessSignIn();
-
-      if (result.isNotEmpty) {
-
-        UserData.setUserId(result['data']['userId']);
-        UserData.setAccessToken(result['token']['accesstoken']);
-
-        final prefs = Prefs();
-
-        await prefs.setString('previousSignIn', DateTime.now().millisecondsSinceEpoch.toString());
-        await prefs.setString('tokenExpiry', result['token']['tokenExpire'].toString().split(' ')[0]);
-        await prefs.setString('lastVerification', DateTime.now().millisecondsSinceEpoch.toString());
-
-        return true;
-      } else {
-        return false;
-      }
+      return await Auth().accessSignIn();
     } else {
       return true;
     }
